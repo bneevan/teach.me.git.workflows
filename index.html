@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Engineering Git Workflows — Interactive Course Dashboard</title>
-  <link rel="stylesheet" href="assets/styles.css?v=2.1">
+  <link rel="stylesheet" href="assets/styles.css?v=2.2">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌿</text></svg>">
 </head>
 <body>
@@ -78,11 +78,14 @@
           <h3 class="module-title">Foundations: DAG & Snapshots</h3>
           <p class="module-desc">Directed Acyclic Graphs (DAG), tree snapshots vs file deltas, parent pointer directions, and why branches are 41-byte text pointers.</p>
           
-          <div class="module-lessons-group">
-            <div class="lessons-header-text">Lessons:</div>
-            <div class="lesson-pill-row">
-              <a href="lessons/0001-the-git-dag-and-snapshots.html" class="lesson-pill completed">01. DAG & Snapshots ✓</a>
-            </div>
+          <div class="module-syllabus">
+            <a href="lessons/0001-the-git-dag-and-snapshots.html" class="syllabus-row">
+              <div class="syllabus-left">
+                <span class="syllabus-icon done">✓</span>
+                <span class="syllabus-title">01. The Git DAG & Snapshots</span>
+              </div>
+              <span class="syllabus-time">10 min</span>
+            </a>
           </div>
 
           <div class="module-tags">
@@ -106,11 +109,14 @@
           <h3 class="module-title">Centralized & Push Contention</h3>
           <p class="module-desc">The SVN transition model. Single main branch, lockstep collaboration, local rebasing, push rejection loops, and why teams outgrow it.</p>
           
-          <div class="module-lessons-group">
-            <div class="lessons-header-text">Lessons:</div>
-            <div class="lesson-pill-row">
-              <a href="lessons/0002-centralized-workflow-and-push-rejections.html" class="lesson-pill completed">02. Push Contention ✓</a>
-            </div>
+          <div class="module-syllabus">
+            <a href="lessons/0002-centralized-workflow-and-push-rejections.html" class="syllabus-row">
+              <div class="syllabus-left">
+                <span class="syllabus-icon done">✓</span>
+                <span class="syllabus-title">02. Push Contention & Rebasing</span>
+              </div>
+              <span class="syllabus-time">12 min</span>
+            </a>
           </div>
 
           <div class="module-tags">
@@ -134,12 +140,21 @@
           <h3 class="module-title">Feature Branching & Investigation</h3>
           <p class="module-desc">Topic branches, Pull Request lifecycle, branch protection rules, Squash vs Merge, and forensic debugging with git bisect, blame, and reflog.</p>
           
-          <div class="module-lessons-group">
-            <div class="lessons-header-text">Lessons:</div>
-            <div class="lesson-pill-row">
-              <a href="lessons/0003-feature-branches-and-github-flow.html" class="lesson-pill completed">03. GitHub Flow ✓</a>
-              <a href="lessons/0004-git-investigation-tools-and-atomic-commits.html" class="lesson-pill completed">04. Forensic Tools ✓</a>
-            </div>
+          <div class="module-syllabus">
+            <a href="lessons/0003-feature-branches-and-github-flow.html" class="syllabus-row">
+              <div class="syllabus-left">
+                <span class="syllabus-icon done">✓</span>
+                <span class="syllabus-title">03. Feature Branches & GitHub Flow</span>
+              </div>
+              <span class="syllabus-time">12 min</span>
+            </a>
+            <a href="lessons/0004-git-investigation-tools-and-atomic-commits.html" class="syllabus-row">
+              <div class="syllabus-left">
+                <span class="syllabus-icon done">✓</span>
+                <span class="syllabus-title">04. Forensic Git Tools & Bisect</span>
+              </div>
+              <span class="syllabus-time">15 min</span>
+            </a>
           </div>
 
           <div class="module-tags">
@@ -163,11 +178,14 @@
           <h3 class="module-title">Trunk-Based Development (TBD)</h3>
           <p class="module-desc">High-velocity engineering at Google and Meta scale. Sub-24h branches, continuous integration discipline, Feature Toggles, and Branch by Abstraction.</p>
           
-          <div class="module-lessons-group">
-            <div class="lessons-header-text">Lessons:</div>
-            <div class="lesson-pill-row">
-              <a href="lessons/0005-trunk-based-development-and-feature-flags.html" class="lesson-pill active">05. Trunk & Flags ●</a>
-            </div>
+          <div class="module-syllabus">
+            <a href="lessons/0005-trunk-based-development-and-feature-flags.html" class="syllabus-row active">
+              <div class="syllabus-left">
+                <span class="syllabus-icon current">●</span>
+                <span class="syllabus-title">05. Trunk & Feature Flags</span>
+              </div>
+              <span class="syllabus-time">15 min</span>
+            </a>
           </div>
 
           <div class="module-tags">
@@ -191,10 +209,13 @@
           <h3 class="module-title">Gitflow & Scheduled Releases</h3>
           <p class="module-desc">The dual-branch spine (main + develop), release hardening tracks, hotfix branches off production, SemVer synchronization, and when NOT to use it.</p>
           
-          <div class="module-lessons-group">
-            <div class="lessons-header-text">Lessons:</div>
-            <div class="lesson-pill-row">
-              <span class="lesson-pill" style="opacity: 0.7;">06. Dual-Branch Gitflow</span>
+          <div class="module-syllabus">
+            <div class="syllabus-row" style="opacity: 0.6; cursor: default;">
+              <div class="syllabus-left">
+                <span class="syllabus-icon locked">○</span>
+                <span class="syllabus-title">06. Dual-Branch Gitflow</span>
+              </div>
+              <span class="syllabus-time">Upcoming</span>
             </div>
           </div>
 
@@ -219,10 +240,13 @@
           <h3 class="module-title">Fork & Pull Request (OSS)</h3>
           <p class="module-desc">Distributed trust boundaries. Upstream vs Origin remotes, rebase syncing, maintainer triage, CI security risks with untrusted PRs, and CLA checks.</p>
           
-          <div class="module-lessons-group">
-            <div class="lessons-header-text">Lessons:</div>
-            <div class="lesson-pill-row">
-              <span class="lesson-pill" style="opacity: 0.7;">07. Upstream Remotes</span>
+          <div class="module-syllabus">
+            <div class="syllabus-row" style="opacity: 0.6; cursor: default;">
+              <div class="syllabus-left">
+                <span class="syllabus-icon locked">○</span>
+                <span class="syllabus-title">07. Upstream Remotes & Governance</span>
+              </div>
+              <span class="syllabus-time">Upcoming</span>
             </div>
           </div>
 
@@ -247,10 +271,13 @@
           <h3 class="module-title">Release Management & SemVer</h3>
           <p class="module-desc">SemVer 2.0.0 contracts, Conventional Commits automation, annotated Git tags, release candidates, changelog generation, and surgical cherry-picks.</p>
           
-          <div class="module-lessons-group">
-            <div class="lessons-header-text">Lessons:</div>
-            <div class="lesson-pill-row">
-              <span class="lesson-pill" style="opacity: 0.7;">08. SemVer & Tags</span>
+          <div class="module-syllabus">
+            <div class="syllabus-row" style="opacity: 0.6; cursor: default;">
+              <div class="syllabus-left">
+                <span class="syllabus-icon locked">○</span>
+                <span class="syllabus-title">08. SemVer, Tags & Conventional Commits</span>
+              </div>
+              <span class="syllabus-time">Upcoming</span>
             </div>
           </div>
 
@@ -275,10 +302,13 @@
           <h3 class="module-title">Monorepos vs Polyrepos</h3>
           <p class="module-desc">Single source of truth for cross-project code. Atomic refactoring, sparse checkout, affected build graph analysis (Nx/Bazel/Turborepo), and CODEOWNERS boundaries.</p>
           
-          <div class="module-lessons-group">
-            <div class="lessons-header-text">Lessons:</div>
-            <div class="lesson-pill-row">
-              <span class="lesson-pill" style="opacity: 0.7;">09. Monorepo Tools</span>
+          <div class="module-syllabus">
+            <div class="syllabus-row" style="opacity: 0.6; cursor: default;">
+              <div class="syllabus-left">
+                <span class="syllabus-icon locked">○</span>
+                <span class="syllabus-title">09. Monorepos, Nx & Bazel</span>
+              </div>
+              <span class="syllabus-time">Upcoming</span>
             </div>
           </div>
 
@@ -303,10 +333,13 @@
           <h3 class="module-title">GitOps & Declarative Delivery</h3>
           <p class="module-desc">Git as the authoritative state for cloud-native systems. In-cluster reconciliation agents (ArgoCD/Flux), immutable commit digests, and promotion patterns without branch drift.</p>
           
-          <div class="module-lessons-group">
-            <div class="lessons-header-text">Lessons:</div>
-            <div class="lesson-pill-row">
-              <span class="lesson-pill" style="opacity: 0.7;">10. GitOps & ArgoCD</span>
+          <div class="module-syllabus">
+            <div class="syllabus-row" style="opacity: 0.6; cursor: default;">
+              <div class="syllabus-left">
+                <span class="syllabus-icon locked">○</span>
+                <span class="syllabus-title">10. GitOps & ArgoCD Orchestration</span>
+              </div>
+              <span class="syllabus-time">Upcoming</span>
             </div>
           </div>
 
@@ -485,6 +518,6 @@
 
   </div>
 
-  <script src="assets/app.js?v=2.1"></script>
+  <script src="assets/app.js?v=2.2"></script>
 </body>
 </html>
