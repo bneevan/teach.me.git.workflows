@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 05: Trunk-Based Development & Feature Flags</title>
+  <link rel="stylesheet" href="../assets/styles.css?v=2.0">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌿</text></svg>">
+</head>
+<body>
+  <div class="container lesson-container">
+    <div class="lesson-meta-bar">
+      <div>
+        <a href="../dashboard.html" style="font-size: 0.85rem; font-weight: 600;">← Back to Dashboard</a>
+        <h1 style="font-size: 1.85rem; margin-top: 0.4rem;">Lesson 05: Trunk-Based Development & Feature Flags</h1>
+      </div>
+      <button class="btn btn-sm" onclick="toggleTheme()" id="theme-toggle-btn">☀️ Light</button>
+    </div>
+
+    <div class="lesson-content">
+      <div class="callout">
+        <div class="callout-title">🎯 Single Tangible Win for this Lesson</div>
+        <p>Understand how elite engineering organizations (Google, Netflix, Meta) eliminate merge hell entirely by enforcing <strong>sub-24h branch lifespans</strong> and decoupling technical code deployment from business feature releases using <strong>Feature Flags</strong>.</p>
+      </div>
+
+      <h2>1. The Scaling Bottleneck of Feature Branches</h2>
+      <p>In <a href="0003-feature-branches-and-github-flow.html">Lesson 03</a>, we studied GitHub Flow. But what happens when an engineering team grows from 10 developers to 200 developers?</p>
+      <p>If 50 feature branches live for 4 days each, the main branch moves forward by hundreds of commits every day. When each developer finally tries to merge, they face massive semantic conflicts and regression risks. Research by DORA (DevOps Research and Assessment) consistently proves: <strong>Long-lived branches are the single strongest predictor of slow delivery and high failure rates.</strong></p>
+
+      <h2>2. What is Trunk-Based Development (TBD)?</h2>
+      <p>In Trunk-Based Development:</p>
+      <ul>
+        <li>There is only one shared branch: <strong><code>trunk</code></strong> (or <code>main</code>).</li>
+        <li>Feature branches are <strong>short-lived</strong>: they live for <strong>less than 24 hours</strong> (often just 2–4 hours).</li>
+        <li>Every engineer integrates their work into trunk at least once a day.</li>
+      </ul>
+
+      <h2>3. The Grand Dilemma: "My Feature Takes 2 Weeks!"</h2>
+      <p>The immediate objection every engineer raises: <em>"I'm building an entirely new checkout workflow that takes 2 weeks. If I merge my incomplete code tomorrow, won't customers see broken UI?"</em></p>
+      <p>The answer is the cornerstone of modern software delivery: <strong>Decouple Deployment from Release</strong>.</p>
+
+      <div class="terminal-block">
+        <div class="terminal-header">
+          <span class="terminal-dot red"></span>
+          <span class="terminal-dot yellow"></span>
+          <span class="terminal-dot green"></span>
+          <span class="terminal-title">feature toggle pattern</span>
+        </div>
+        <div class="terminal-body"># Day 1: New UI component merged into trunk, but hidden from customers
+def render_checkout_page(user):
+    if feature_flags.is_enabled("new_checkout_flow", user=user):
+        return render_v2_checkout()  # Active only for internal test accounts!
+    
+    return render_legacy_checkout()  # Active for 100% of production traffic</div>
+      </div>
+
+      <h2>4. The Power of Feature Flags</h2>
+      <div class="concept-compare">
+        <div class="compare-card">
+          <h4 style="color: var(--accent-primary);">Deployment (Technical Action)</h4>
+          <p>Compiling, running automated tests, and deploying code to production servers. Happens multiple times per day with zero user impact.</p>
+        </div>
+        <div class="compare-card pro">
+          <h4 style="color: var(--accent-success);">Release (Business Action)</h4>
+          <p>Toggling the feature flag in a management dashboard (LaunchDarkly, Unleash, Statsig). Enables instant canary testing (1% -> 10% -> 100%) and instant kill-switches with zero code redeploys.</p>
+        </div>
+      </div>
+
+      <h2>5. Branch by Abstraction</h2>
+      <p>What if you are refactoring backend code (like replacing an SQL database with DynamoDB) where UI flags don't apply? You use <strong>Branch by Abstraction</strong>:</p>
+      <ol style="padding-left: 1.5rem; line-height: 1.8; margin-bottom: 1.5rem;">
+        <li>Define an interface/abstraction layer around the old code. (Merge to trunk on Day 1).</li>
+        <li>Write the new implementation in small commits behind the interface. (Merge to trunk daily).</li>
+        <li>Switch the dependency injection binding or flag to use the new implementation. (Single atomic merge).</li>
+        <li>Delete the old implementation.</li>
+      </ol>
+
+      <h2>6. Primary Source Authority</h2>
+      <p>📖 <a href="https://trunkbaseddevelopment.com/" target="_blank" style="font-weight: 600;">Trunk-Based Development Portal</a> by Paul Hammant.</p>
+      <p>📑 Companion Reference: <a href="../reference/trunk-based-development.html">Reference Sheet: Trunk-Based Development Architecture</a>.</p>
+
+      <h2>7. Check Your Understanding</h2>
+      <div class="exercise-box">
+        <h3>Scenario Challenge</h3>
+        <p>A software team wants to migrate from 2-week feature branches to Trunk-Based Development. What is the mandatory technical prerequisite they must establish first to prevent trunk from constantly breaking?</p>
+
+        <button class="quiz-option" data-correct="false" onclick="handleQuizAnswer(this, false, 'quiz-expl-05', '', 'Gitflow creates more permanent branches, which is the exact opposite of Trunk-Based Development.')">
+          A. Adding permanent develop and release branches to isolate trunk from developer changes.
+        </button>
+        <button class="quiz-option" data-correct="true" onclick="handleQuizAnswer(this, true, 'quiz-expl-05', 'High-velocity trunk integration requires automated test suites that run in under 5-10 minutes on PRs, combined with Feature Flags to hide incomplete features.', '')">
+          B. Fast automated test pipelines (< 10 min) and Feature Flags to hide incomplete functionality.
+        </button>
+        <button class="quiz-option" data-correct="false" onclick="handleQuizAnswer(this, false, 'quiz-expl-05', '', 'Code reviews alone cannot guarantee that code compiles, passes tests, or stays safe in production.')">
+          C. Requiring three senior engineer peer review sign-offs before any commit can be pushed.
+        </button>
+
+        <div id="quiz-expl-05" style="display: none;"></div>
+      </div>
+
+      <div class="callout callout-reflection">
+        <div class="callout-title">💬 Socratic Reflection with Your Assistant</div>
+        <p>If an engineer can toggle a feature off in production in 2 seconds using a feature flag, what does that do to the traditional concept of an emergency "Hotfix branch"?</p>
+      </div>
+    </div>
+  </div>
+
+  <script src="../assets/app.js?v=2.0"></script>
+</body>
+</html>

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reference: Trunk-Based Development (TBD) Architecture</title>
+  <link rel="stylesheet" href="../assets/styles.css?v=2.0">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌿</text></svg>">
+</head>
+<body>
+  <div class="container lesson-container">
+    <div class="lesson-meta-bar">
+      <div>
+        <a href="../dashboard.html" style="font-size: 0.85rem; font-weight: 600;">← Back to Dashboard</a>
+        <h1 style="font-size: 1.85rem; margin-top: 0.4rem;">Reference Sheet: Trunk-Based Development (TBD)</h1>
+      </div>
+      <button class="btn btn-sm" onclick="toggleTheme()" id="theme-toggle-btn">☀️ Light</button>
+    </div>
+
+    <div class="lesson-content">
+      <div class="callout">
+        <div class="callout-title">💡 The Core TBD Law</div>
+        <p>Merge conflicts grow super-linearly with branch lifespan. <strong>Trunk-Based Development eliminates merge debt by ensuring all branches live for less than 24 hours</strong>, continuously integrating small, tested slices into trunk.</p>
+      </div>
+
+      <h2>1. The GitHub Flow vs. TBD Spectrum</h2>
+      <div class="concept-compare">
+        <div class="compare-card">
+          <h4 style="color: var(--accent-primary);">GitHub Flow (Feature Branches)</h4>
+          <p>Branches represent entire features and remain open until the full feature is complete (often 2–5 days). Code is deployed to production when the feature is ready.</p>
+        </div>
+        <div class="compare-card pro">
+          <h4 style="color: var(--accent-success);">Trunk-Based Development</h4>
+          <p>Branches represent tiny sub-day increments (&lt; 24h). Unfinished features are committed to trunk continuously behind <strong>Feature Flags</strong>.</p>
+        </div>
+      </div>
+
+      <h2>2. Decoupling Deployment from Release</h2>
+      <p>The central breakthrough of Trunk-Based Development is separating technical delivery from business exposure:</p>
+      <ul>
+        <li><strong>Deployment (Technical Action):</strong> Placing compiled, tested code onto production servers. This happens continuously multiple times a day.</li>
+        <li><strong>Release (Business Action):</strong> Making that functionality visible and usable to end users. This is controlled via a dynamic Feature Flag toggle.</li>
+      </ul>
+
+      <div class="terminal-block">
+        <div class="terminal-header">
+          <span class="terminal-dot red"></span>
+          <span class="terminal-dot yellow"></span>
+          <span class="terminal-dot green"></span>
+          <span class="terminal-title">feature toggle pattern</span>
+        </div>
+        <div class="terminal-body">def process_payment(order):
+    # Unfinished new engine merged safely into trunk:
+    if feature_flags.is_enabled("use_v2_stripe_engine", user=order.user):
+        return stripe_v2_engine.charge(order)
+    
+    # Stable default engine for 100% of users:
+    return legacy_engine.charge(order)</div>
+      </div>
+
+      <h2>3. Branch by Abstraction: Refactoring Without Branches</h2>
+      <p>How do teams replace an entire database engine or auth system without creating a 6-month stale branch? <strong>Branch by Abstraction</strong>:</p>
+      <ol style="padding-left: 1.5rem; line-height: 1.8; margin-bottom: 1.5rem;">
+        <li><strong>Create an Abstraction Layer:</strong> Wrap existing legacy calls in an interface. (Commit to trunk).</li>
+        <li><strong>Build the New Implementation:</strong> Write the new implementation class alongside the old one. (Merge small commits to trunk daily).</li>
+        <li><strong>Switch the Pointer:</strong> Update the interface factory or feature flag to point to the new implementation. (One atomic commit).</li>
+        <li><strong>Delete Legacy Code:</strong> Safely remove old code once production metrics verify stability.</li>
+      </ol>
+
+      <h2>4. Scaled TBD & Merge Queues</h2>
+      <p>At companies like Google, Meta, and Shopify where hundreds of engineers commit every hour, a human cannot manually rebase fast enough. Teams use <strong>Merge Queues</strong> (e.g. GitHub Merge Queue, Bors):</p>
+      <ul>
+        <li>PRs enter an automated queue when approved.</li>
+        <li>The merge robot speculatively merges PRs into trunk, runs test suites, and commits in atomic batches.</li>
+        <li>If a PR breaks tests, the robot ejects that PR and keeps trunk 100% green without stopping other engineers.</li>
+      </ul>
+    </div>
+  </div>
+  <script src="../assets/app.js?v=2.0"></script>
+</body>
+</html>

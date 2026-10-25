@@ -56,4 +56,27 @@ _Avoid_: Step-through debug, commit search
 A local ledger that records every update to local references and the HEAD pointer, allowing recovery of abandoned commits or undone rebases.
 _Avoid_: Git undo log, commit history backup
 
+## Governance & High-Velocity Branching
+
+**Branch Protection Rules**:
+Server-side constraints enforced on designated branches that require peer review approvals, passing CI checks, and linear history before changes can be integrated.
+_Avoid_: Branch locks, merge permissions
+
+**Git Revert**:
+A forward-moving rollback operation that records a new commit containing the exact inverse changes of a targeted commit, preserving unbroken history.
+_Avoid_: Undo commit, roll-back command
+
+**Trunk-Based Development (TBD)**:
+A branching pattern where all developers merge short-lived feature branches (< 24 hours) directly into a single shared trunk, supported by fast automated testing.
+_Avoid_: Master-only development, trunkline
+
+**Feature Flag (Feature Toggle)**:
+A software engineering mechanism that wraps unreleased code in a conditional check, enabling code deployment to production while hiding functionality from end users.
+_Avoid_: Feature switch, config flag
+
+**Branch by Abstraction**:
+A refactoring technique that introduces an abstraction layer around legacy code, builds a new implementation alongside it in trunk, and flips the dependency once ready.
+_Avoid_: In-place replacement, refactor branch
+
+
 
