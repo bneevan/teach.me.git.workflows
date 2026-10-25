@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 03: Feature Branching & GitHub Flow</title>
+  <link rel="stylesheet" href="../assets/styles.css?v=2.0">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌿</text></svg>">
+</head>
+<body>
+  <div class="container lesson-container">
+    <div class="lesson-meta-bar">
+      <div>
+        <a href="../dashboard.html" style="font-size: 0.85rem; font-weight: 600;">← Back to Dashboard</a>
+        <h1 style="font-size: 1.85rem; margin-top: 0.4rem;">Lesson 03: Feature Branching & GitHub Flow</h1>
+      </div>
+      <button class="btn btn-sm" onclick="toggleTheme()" id="theme-toggle-btn">☀️ Light</button>
+    </div>
+
+    <div class="lesson-content">
+      <div class="callout">
+        <div class="callout-title">🎯 Single Tangible Win for this Lesson</div>
+        <p>Understand how <strong>Feature Branching and GitHub Flow</strong> solve the push contention race of centralized development by isolating work in topic branches, enforcing peer review gates via Pull Requests, and coupling merging directly with continuous deployment.</p>
+      </div>
+
+      <h2>1. The Problem GitHub Flow Solved</h2>
+      <p>In <a href="0002-centralized-workflow-and-push-rejections.html">Lesson 02</a>, we saw that as soon as 3 or more engineers work on a single <code>main</code> branch, they run into a frantic push race. Whoever finishes first pushes, while everyone else gets rejected with <code>non-fast-forward</code> errors and must constantly rebase.</p>
+      <p>To eliminate this friction, GitHub introduced <strong>GitHub Flow</strong> in 2011—a lightweight, branch-and-PR model designed for web teams practicing Continuous Delivery.</p>
+
+      <h2>2. The Branch Lifecycle</h2>
+      <div class="terminal-block">
+        <div class="terminal-header">
+          <span class="terminal-dot red"></span>
+          <span class="terminal-dot yellow"></span>
+          <span class="terminal-dot green"></span>
+          <span class="terminal-title">github flow lifecycle</span>
+        </div>
+        <div class="terminal-body">1. Create topic branch off main:
+   $ git checkout -b feat/stripe-billing
+
+2. Commit small atomic units and push branch to remote:
+   $ git push -u origin feat/stripe-billing
+
+3. Open a Pull Request (PR) against main:
+   - Automated CI runs: unit tests, linting, security scans
+   - Teammates review code, leave comments, request changes
+
+4. Merge into main upon approval & green CI:
+   - Branch merges into main
+   - Automated CD triggers and deploys main to production!</div>
+      </div>
+
+      <h2>3. The Core Invariant: "Main is Always Deployable"</h2>
+      <p>In GitHub Flow, there is no separate <code>develop</code> branch or staging branch. <code>main</code> is the single source of truth. If a commit lands on <code>main</code>, it must be stable, tested, and ready to ship to users immediately.</p>
+
+      <h2>4. Pull Request Merge Strategies</h2>
+      <p>When closing a PR on GitHub or GitLab, you can choose from 3 merge strategies:</p>
+
+      <div class="concept-compare">
+        <div class="compare-card">
+          <h4 style="color: var(--accent-primary);">Merge Commit</h4>
+          <p>Preserves all WIP commits and adds a 2-parent merge commit. Shows exact chronological branch topology, but can clutter history.</p>
+        </div>
+        <div class="compare-card pro">
+          <h4 style="color: var(--accent-success);">Squash and Merge</h4>
+          <p>Collapses 15 messy commits ("wip", "fix typo", "fix tests") into 1 pristine, atomic commit on <code>main</code>. Makes git bisect and reverts effortless.</p>
+        </div>
+      </div>
+
+      <h2>5. The Anti-Pattern: Branch Aging Debt</h2>
+      <p>Feature branches solve push contention, but introduce a new risk: <strong>branch aging</strong>. If a developer keeps a feature branch open for 3 weeks while 100 commits land on <code>main</code>, merging that branch becomes a nightmare.</p>
+      <div class="callout">
+        <div class="callout-title">⚡ Best Practice Rule of Thumb</div>
+        <p>In high-performing GitHub Flow teams, feature branches live for <strong>less than 2 days</strong> (ideally a few hours). If a feature takes 2 weeks to build, it is broken down into small, independently deployable PRs.</p>
+      </div>
+
+      <h2>6. Primary Source Authority</h2>
+      <p>📖 <a href="https://docs.github.com/en/get-started/using-github/github-flow" target="_blank" style="font-weight: 600;">GitHub Flow Official Guide</a> by GitHub.</p>
+      <p>📑 Companion Reference: <a href="../reference/feature-branching-and-github-flow.html">Reference Sheet: Feature Branching & GitHub Flow</a>.</p>
+
+      <h2>7. Check Your Understanding</h2>
+      <div class="exercise-box">
+        <h3>Scenario Challenge</h3>
+        <p>A software team using GitHub Flow notices that their <code>main</code> branch breaks production three times in one week. Which engineering control is specifically designed to eliminate this issue?</p>
+
+        <button class="quiz-option" data-correct="false" onclick="handleQuizAnswer(this, false, 'quiz-expl-03', '', 'Rebasing linearizes history but does not verify whether code compiles or tests pass.')">
+          A. Enforcing linear history by mandating local git pull --rebase before every push.
+        </button>
+        <button class="quiz-option" data-correct="true" onclick="handleQuizAnswer(this, true, 'quiz-expl-03', 'Branch protection rules require all automated CI test suites to pass and require peer review sign-offs before any code can be merged into main.', '')">
+          B. Enabling branch protection rules requiring passing CI checks and peer approvals.
+        </button>
+        <button class="quiz-option" data-correct="false" onclick="handleQuizAnswer(this, false, 'quiz-expl-03', '', 'Feature branches can still introduce bugs into main if merged without automated test gates.')">
+          C. Creating long-lived staging branches where code sits for two weeks before release.
+        </button>
+
+        <div id="quiz-expl-03" style="display: none;"></div>
+      </div>
+
+      <div class="callout callout-reflection">
+        <div class="callout-title">💬 Socratic Reflection with Your Assistant</div>
+        <p>Think about code reviews on your team or projects you've seen. When merging a PR with 8 intermediate commits ("fix lint", "update tests", "oops typo"), do you prefer a <strong>Squash and Merge</strong> or a <strong>Merge Commit</strong>? What are the trade-offs?</p>
+      </div>
+    </div>
+  </div>
+
+  <script src="../assets/app.js?v=2.0"></script>
+</body>
+</html>

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reference: Feature Branching & GitHub Flow</title>
+  <link rel="stylesheet" href="../assets/styles.css?v=2.0">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌿</text></svg>">
+</head>
+<body>
+  <div class="container lesson-container">
+    <div class="lesson-meta-bar">
+      <div>
+        <a href="../dashboard.html" style="font-size: 0.85rem; font-weight: 600;">← Back to Dashboard</a>
+        <h1 style="font-size: 1.85rem; margin-top: 0.4rem;">Reference Sheet: Feature Branching & GitHub Flow</h1>
+      </div>
+      <button class="btn btn-sm" onclick="toggleTheme()" id="theme-toggle-btn">☀️ Light</button>
+    </div>
+
+    <div class="lesson-content">
+      <div class="callout">
+        <div class="callout-title">💡 The Core GitHub Flow Principle</div>
+        <p>There is strictly <strong>one permanent branch</strong>: <code>main</code>. Anything in <code>main</code> is deployable to production. All new work happens on short-lived feature branches reviewed via Pull Requests and deployed continuously.</p>
+      </div>
+
+      <h2>1. The 6 Rules of GitHub Flow</h2>
+      <ol style="padding-left: 1.5rem; line-height: 1.8; margin-bottom: 1.5rem;">
+        <li><strong>Deployable Main:</strong> Anything in the <code>main</code> branch is deployable to production at all times.</li>
+        <li><strong>Descriptive Branch Off Main:</strong> Create a short-lived branch directly off <code>main</code> with a descriptive name (e.g. <code>feat/user-avatar</code> or <code>fix/csrf-token</code>).</li>
+        <li><strong>Push Regularly:</strong> Push your branch to the remote early and often so work is visible, backed up, and testable by CI.</li>
+        <li><strong>Open a Pull Request (PR):</strong> Open a PR early to solicit code review, trigger automated test pipelines, and discuss implementation trade-offs.</li>
+        <li><strong>Merge After Approval:</strong> Once automated checks pass and team reviewers sign off, merge into <code>main</code>.</li>
+        <li><strong>Deploy Immediately:</strong> Deploy immediately upon merge to production (or staging -> prod via continuous deployment).</li>
+      </ol>
+
+      <h2>2. Topology Diagram</h2>
+      <div class="terminal-block">
+        <div class="terminal-header">
+          <span class="terminal-dot red"></span>
+          <span class="terminal-dot yellow"></span>
+          <span class="terminal-dot green"></span>
+          <span class="terminal-title">github flow topology</span>
+        </div>
+        <div class="terminal-body">[main] (Deployable)
+  (C1) ----------------------- (C2) ---------------------------- (M) [Deploy to Prod!]
+    \                                                             /
+     \-- (Branch: feat/search) -> (F1) ---- (F2) ---- [PR Approved]</div>
+      </div>
+
+      <h2>3. Pull Request Merge Strategies Compared</h2>
+      <div class="concept-compare">
+        <div class="compare-card">
+          <h4 style="color: var(--accent-primary);">1. Create Merge Commit</h4>
+          <p>Retains full branch history with a 2-parent merge commit (<code>Merge pull request #42</code>).</p>
+          <p style="margin-top: 0.5rem; font-size: 0.85rem; color: var(--text-muted);"><strong>Best for:</strong> Preserving original branch shape and independent commit identities.</p>
+        </div>
+        <div class="compare-card">
+          <h4 style="color: var(--accent-success);">2. Squash and Merge</h4>
+          <p>Combines all branch commits into a single atomic commit on <code>main</code>.</p>
+          <p style="margin-top: 0.5rem; font-size: 0.85rem; color: var(--text-muted);"><strong>Best for:</strong> High-velocity web teams wanting pristine, revertible, bisectable main history.</p>
+        </div>
+        <div class="compare-card">
+          <h4 style="color: var(--accent-purple);">3. Rebase and Merge</h4>
+          <p>Replays individual commits linearly onto <code>main</code> without a merge commit.</p>
+          <p style="margin-top: 0.5rem; font-size: 0.85rem; color: var(--text-muted);"><strong>Best for:</strong> Teams enforcing disciplined atomic commits who want a 100% linear history.</p>
+        </div>
+      </div>
+
+      <h2>4. Branch Protection Rules: The Safety Net</h2>
+      <p>Modern engineering teams protect <code>main</code> against human error using repository settings:</p>
+      <ul>
+        <li><strong>Require Pull Request Before Merging:</strong> Completely disables direct <code>git push origin main</code>.</li>
+        <li><strong>Require Approvals:</strong> Enforces minimum peer sign-offs (e.g. 1 or 2 senior reviews).</li>
+        <li><strong>Require Status Checks to Pass:</strong> Automated test suites, linting, security scans, and build steps must be green before the merge button unlocks.</li>
+        <li><strong>Require Conversation Resolution:</strong> Blocks merging if any code review comment remains open.</li>
+      </ul>
+    </div>
+  </div>
+  <script src="../assets/app.js?v=2.0"></script>
+</body>
+</html>
