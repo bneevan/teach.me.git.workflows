@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 02: The Centralized Workflow & Push Contention</title>
+  <link rel="stylesheet" href="../assets/styles.css?v=2.0">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌿</text></svg>">
+</head>
+<body>
+  <div class="container lesson-container">
+    <div class="lesson-meta-bar">
+      <div>
+        <a href="../dashboard.html" style="font-size: 0.85rem; font-weight: 600;">← Back to Dashboard</a>
+        <h1 style="font-size: 1.85rem; margin-top: 0.4rem;">Lesson 02: Centralized Workflow & Push Contention</h1>
+      </div>
+      <button class="btn btn-sm" onclick="toggleTheme()" id="theme-toggle-btn">☀️ Light</button>
+    </div>
+
+    <div class="lesson-content">
+      <div class="callout">
+        <div class="callout-title">🎯 Single Tangible Win for this Lesson</div>
+        <p>Understand the exact mechanics of how teams operate in a <strong>Centralized Git Workflow</strong>, why Git enforces <strong>non-fast-forward push rejections</strong>, and the scaling ceiling that forces teams to adopt Feature Branches.</p>
+      </div>
+
+      <h2>1. The Centralized Topology</h2>
+      <p>Before GitHub Pull Requests revolutionized software collaboration, most teams migrated to Git directly from Subversion (SVN) or Perforce. They adopted the <strong>Centralized Workflow</strong>:</p>
+      <ul>
+        <li><strong>One Central Branch:</strong> Only a single branch (<code>main</code>) exists on the remote server.</li>
+        <li><strong>No Feature Branches:</strong> Developers commit directly to their local <code>main</code> branch.</li>
+        <li><strong>Direct Pushes:</strong> Everyone attempts to push their local commits directly to <code>origin/main</code>.</li>
+      </ul>
+
+      <h2>2. The Non-Fast-Forward Collision</h2>
+      <p>Imagine Alice and Bob both clone the project at commit <code>C1</code> on Monday morning. They both work independently:</p>
+      
+      <div class="terminal-block">
+        <div class="terminal-header">
+          <span class="terminal-dot red"></span>
+          <span class="terminal-dot yellow"></span>
+          <span class="terminal-dot green"></span>
+          <span class="terminal-title">git collision sequence</span>
+        </div>
+        <div class="terminal-body">1. Alice finishes first and commits C2 locally:
+   Alice: (C1) <--- (C2)
+   Alice runs: git push origin main -> SUCCESS!
+   Remote main is now pointing at (C2).
+
+2. Bob finishes his feature and commits C3 locally:
+   Bob:   (C1) <--- (C3)
+   Bob runs: git push origin main -> FATAL REJECTION!</div>
+      </div>
+
+      <div class="terminal-block">
+        <div class="terminal-header">
+          <span class="terminal-dot red"></span>
+          <span class="terminal-dot yellow"></span>
+          <span class="terminal-dot green"></span>
+          <span class="terminal-title">git push output</span>
+        </div>
+        <div class="terminal-body" style="color: #f87171;">To https://github.com/org/repo.git
+ ! [rejected]        main -> main (non-fast-forward)
+error: failed to push some refs to 'https://github.com/org/repo.git'
+hint: Updates were rejected because the tip of your current branch is behind
+hint: its remote counterpart. Integrate the remote changes (e.g. 'git pull')
+hint: before pushing again.</div>
+      </div>
+
+      <h2>3. Why Did Git Reject Bob?</h2>
+      <p>Remember the law of Git's DAG from <a href="0001-the-git-dag-and-snapshots.html" style="font-weight: 600;">Lesson 01</a>! A branch is a pointer to the tip of a parent chain.</p>
+      <p>For Git to allow a <strong>Fast-Forward Push</strong>, the remote commit (Alice's <code>C2</code>) must be a direct ancestor of Bob's commit (<code>C3</code>). But Bob's commit <code>C3</code> points backwards to <code>C1</code>—it knows nothing about <code>C2</code>! If Git accepted Bob's push, Alice's commit <code>C2</code> would be detached and lost.</p>
+
+      <h2>4. Bob's Options: Merge vs Rebase</h2>
+      <div class="concept-compare">
+        <div class="compare-card con">
+          <h4 style="color: var(--accent-danger);">Option A: git pull (Merge)</h4>
+          <p>Creates a diamond merge commit linking C2 and C3. Over time, the history fills with hundreds of noisy "Merge branch 'main' of github.com" commits.</p>
+        </div>
+        <div class="compare-card pro">
+          <h4 style="color: var(--accent-success);">Option B: git pull --rebase</h4>
+          <p>Rewinds Bob's local commit C3, advances to Alice's C2, and replays Bob's change on top as C3'. Keeps history perfectly linear and clean.</p>
+        </div>
+      </div>
+
+      <h2>5. The Scalability Ceiling</h2>
+      <p>Why do teams outgrow this workflow once they grow past 2–3 developers? <strong>Push Contention Lockstep:</strong></p>
+      <ul>
+        <li>Developer A pushes. Developer B gets rejected, pulls & rebases, tests, and prepares to push.</li>
+        <li>While Developer B is testing, Developer C pushes! Developer B is rejected <em>again</em>.</li>
+        <li>Engineers enter a frantic "push race" to see who can rebase and push first.</li>
+      </ul>
+
+      <h2>6. Primary Source Authority</h2>
+      <p>📖 <a href="https://git-scm.com/book/en/v2/Distributed-Git-Distributed-Workflows#_centralized_workflow" target="_blank" style="font-weight: 600;">Pro Git Book (Chapter 5: Distributed Git - Centralized Workflow)</a> by Scott Chacon.</p>
+      <p>📑 Companion Reference: <a href="../reference/centralized-workflow-mechanics.html">Centralized Workflow Mechanics & Push Contention</a>.</p>
+
+      <h2>7. Check Your Understanding</h2>
+      <div class="exercise-box">
+        <h3>Interactive Scenario Challenge</h3>
+        <p>Why is a fast-forward push impossible when two developers make commits locally from the same base commit?</p>
+
+        <button class="quiz-option" data-correct="false" onclick="handleQuizAnswer(this, false, 'quiz-expl-02', '', 'Git does not require cryptographic signatures to perform fast-forward moves.')">
+          A. The remote server cannot verify commit signatures without an explicit merge node.
+        </button>
+        <button class="quiz-option" data-correct="true" onclick="handleQuizAnswer(this, true, 'quiz-expl-02', 'A fast-forward is only possible when moving a pointer forward along an unbroken ancestor line. Because Bob’s commit branched off C1, it lacks C2 in its parent history.', '')">
+          B. The incoming commit does not contain the current remote tip in its parent chain.
+        </button>
+        <button class="quiz-option" data-correct="false" onclick="handleQuizAnswer(this, false, 'quiz-expl-02', '', 'Centralized repositories allow direct pushes without pull requests.')">
+          C. Git requires a pull request approval before any commit can move remote pointers.
+        </button>
+
+        <div id="quiz-expl-02" style="display: none;"></div>
+      </div>
+
+      <div class="callout callout-reflection">
+        <div class="callout-title">💬 Socratic Reflection with Your Assistant</div>
+        <p>In your own experience working with Centralized / direct push to main, have you ever run into this <code>[rejected - non-fast-forward]</code> error? How did you resolve it?</p>
+      </div>
+    </div>
+  </div>
+
+  <script src="../assets/app.js?v=2.0"></script>
+</body>
+</html>

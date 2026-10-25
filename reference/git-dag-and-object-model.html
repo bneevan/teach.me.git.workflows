@@ -4,56 +4,15 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Reference: Git DAG & Object Model Architecture</title>
-  <link rel="stylesheet" href="../assets/styles.css?v=1.2">
-  <style>
-    .diagram-box {
-      background: #090d16;
-      border: 1px solid var(--border-color);
-      border-radius: var(--radius-md);
-      padding: 1.5rem;
-      margin: 1.5rem 0;
-      font-family: var(--font-mono);
-      font-size: 0.85rem;
-      line-height: 1.45;
-      overflow-x: auto;
-      color: #38bdf8;
-    }
-    [data-theme="light"] .diagram-box {
-      background: #0f172a;
-      color: #38bdf8;
-      border-color: rgba(0, 0, 0, 0.15);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
-    }
-    .ref-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 1.25rem;
-      margin: 1.5rem 0;
-    }
-    .ref-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border-color);
-      border-radius: var(--radius-md);
-      padding: 1.25rem;
-    }
-    .ref-card p {
-      color: var(--text-secondary);
-      font-size: 0.9rem;
-      margin-bottom: 0.5rem;
-    }
-    .ref-card h4 {
-      color: var(--accent-emerald);
-      margin-bottom: 0.5rem;
-      font-size: 1rem;
-    }
-  </style>
+  <link rel="stylesheet" href="../assets/styles.css?v=2.0">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌿</text></svg>">
 </head>
 <body>
   <div class="container lesson-container">
     <div class="lesson-meta-bar">
       <div>
-        <a href="../dashboard.html" style="color: var(--accent-cyan); text-decoration: none; font-size: 0.85rem;">← Back to Dashboard</a>
-        <h1 style="font-size: 1.8rem; margin-top: 0.5rem;">Reference Sheet: Git's DAG & Object Model</h1>
+        <a href="../dashboard.html" style="font-size: 0.85rem; font-weight: 600;">← Back to Dashboard</a>
+        <h1 style="font-size: 1.85rem; margin-top: 0.4rem;">Reference Sheet: Git's DAG & Object Model</h1>
       </div>
       <button class="btn btn-sm" onclick="toggleTheme()" id="theme-toggle-btn">☀️ Light</button>
     </div>
@@ -65,32 +24,38 @@
       </div>
 
       <h2>1. The Four Fundamental Git Objects</h2>
-      <div class="ref-grid">
-        <div class="ref-card">
-          <h4>1. Blob (Binary Large Object)</h4>
+      <div class="concept-compare">
+        <div class="compare-card">
+          <h4 style="color: var(--accent-primary);">1. Blob (Binary Large Object)</h4>
           <p>Stores raw file contents only. No file name, no timestamp, no file permissions.</p>
-          <code>SHA = hash(size + content)</code>
+          <code style="display: inline-block; margin-top: 0.5rem;">SHA = hash(size + content)</code>
         </div>
-        <div class="ref-card">
-          <h4>2. Tree</h4>
-          <p>Represents a directory. Maps file names, modes, and permissions to Blob SHAs or nested Tree SHAs.</p>
-          <code>100644 blob a1b2... main.py</code>
+        <div class="compare-card">
+          <h4 style="color: var(--accent-primary);">2. Tree</h4>
+          <p>Represents a directory. Maps file names and permissions to Blob SHAs or nested Tree SHAs.</p>
+          <code style="display: inline-block; margin-top: 0.5rem;">100644 blob a1b2... main.py</code>
         </div>
-        <div class="ref-card">
-          <h4>3. Commit</h4>
-          <p>A small text metadata file pointing to a root Tree SHA, parent commit SHA(s), author, committer, and message.</p>
-          <code>tree 7f8a...<br>parent 3b2c...</code>
+        <div class="compare-card">
+          <h4 style="color: var(--accent-primary);">3. Commit</h4>
+          <p>Metadata file pointing to a root Tree SHA, parent commit SHA(s), author, and commit message.</p>
+          <code style="display: inline-block; margin-top: 0.5rem;">tree 7f8a... parent 3b2c...</code>
         </div>
-        <div class="ref-card">
-          <h4>4. Annotated Tag</h4>
-          <p>An immutable pointer to a specific commit, containing a tagger name, date, and verification message/PGP signature.</p>
-          <code>object 4c1d... tag v1.0.0</code>
+        <div class="compare-card">
+          <h4 style="color: var(--accent-primary);">4. Annotated Tag</h4>
+          <p>Permanent pointer to a specific commit, containing tagger name, date, and PGP signature.</p>
+          <code style="display: inline-block; margin-top: 0.5rem;">object 4c1d... tag v1.0.0</code>
         </div>
       </div>
 
       <h2>2. Directed Acyclic Graph (DAG) Anatomy</h2>
-      <div class="diagram-box">
-HEAD -> [ main ] (pointer)
+      <div class="terminal-block">
+        <div class="terminal-header">
+          <span class="terminal-dot red"></span>
+          <span class="terminal-dot yellow"></span>
+          <span class="terminal-dot green"></span>
+          <span class="terminal-title">git DAG topology</span>
+        </div>
+        <div class="terminal-body">HEAD -> [ main ] (movable pointer)
             |
             v
        (Commit C3)  [hash: 9a2f] -> points to [Tree 88cc] (Full Snapshot)
@@ -101,18 +66,26 @@ HEAD -> [ main ] (pointer)
             |
          parent
             v
-       (Commit C1)  [hash: 1a0b] (Initial commit, zero parents)
+       (Commit C1)  [hash: 1a0b] (Initial commit, zero parents)</div>
       </div>
 
       <h2>3. What is a "Branch" Really?</h2>
-      <p>In Git, a branch is <strong>not</strong> a directory of copied files. A branch is simply a <strong>41-byte text file</strong> in <code>.git/refs/heads/&lt;name&gt;</code> containing the 40-character hexadecimal SHA-1 (or 64-character SHA-256) of its latest commit!</p>
-      <div class="code-block">
-$ cat .git/refs/heads/main
-9a2f64c810d2975975db3588ef11b7a69b7f584e
+      <p>In Git, a branch is <strong>not</strong> a directory of copied files. A branch is simply a <strong>41-byte text file</strong> in <code>.git/refs/heads/&lt;name&gt;</code> containing the 40-character hexadecimal SHA of its latest commit!</p>
+      
+      <div class="terminal-block">
+        <div class="terminal-header">
+          <span class="terminal-dot red"></span>
+          <span class="terminal-dot yellow"></span>
+          <span class="terminal-dot green"></span>
+          <span class="terminal-title">inspect branch ref</span>
+        </div>
+        <div class="terminal-body">$ cat .git/refs/heads/main
+9a2f64c810d2975975db3588ef11b7a69b7f584e</div>
       </div>
+
       <p>Moving a branch or making a new branch has <strong>O(1)</strong> constant time complexity and costs virtually zero disk space.</p>
     </div>
   </div>
-  <script src="../assets/app.js"></script>
+  <script src="../assets/app.js?v=2.0"></script>
 </body>
 </html>

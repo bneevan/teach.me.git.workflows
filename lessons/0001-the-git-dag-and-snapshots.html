@@ -4,53 +4,15 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Lesson 01: The True Mental Model — Git's DAG & Snapshots</title>
-  <link rel="stylesheet" href="../assets/styles.css?v=1.2">
-  <style>
-    .ascii-tree {
-      background: #0d1117;
-      border: 1px solid var(--border-color);
-      border-radius: var(--radius-md);
-      padding: 1.25rem;
-      font-family: var(--font-mono);
-      font-size: 0.85rem;
-      line-height: 1.5;
-      color: var(--accent-cyan);
-      margin: 1.5rem 0;
-      overflow-x: auto;
-    }
-    [data-theme="light"] .ascii-tree {
-      background: #0f172a;
-      color: #38bdf8;
-      border-color: rgba(0, 0, 0, 0.15);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
-    }
-    .concept-compare {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1.25rem;
-      margin: 1.5rem 0;
-    }
-    .compare-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border-color);
-      border-radius: var(--radius-md);
-      padding: 1.25rem;
-    }
-    .compare-card p {
-      font-size: 0.88rem;
-      color: var(--text-secondary);
-      margin-bottom: 0;
-    }
-    .delta-vcs { border-top: 3px solid var(--accent-rose); }
-    .git-vcs { border-top: 3px solid var(--accent-emerald); }
-  </style>
+  <link rel="stylesheet" href="../assets/styles.css?v=2.0">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌿</text></svg>">
 </head>
 <body>
   <div class="container lesson-container">
     <div class="lesson-meta-bar">
       <div>
-        <a href="../dashboard.html" style="color: var(--accent-cyan); text-decoration: none; font-size: 0.85rem;">← Back to Dashboard</a>
-        <h1 style="font-size: 1.85rem; margin-top: 0.4rem; font-weight: 800;">Lesson 01: The DAG & Snapshot Architecture</h1>
+        <a href="../dashboard.html" style="font-size: 0.85rem; font-weight: 600;">← Back to Dashboard</a>
+        <h1 style="font-size: 1.85rem; margin-top: 0.4rem;">Lesson 01: The DAG & Snapshot Architecture</h1>
       </div>
       <button class="btn btn-sm" onclick="toggleTheme()" id="theme-toggle-btn">☀️ Light</button>
     </div>
@@ -65,62 +27,78 @@
       <p>Older systems like Subversion (SVN) and CVS conceptualized version control as a base file plus a sequential chain of diff deltas. When you asked for version 5, the server computed: <code>Base + Delta1 + Delta2 + Delta3 + Delta4</code>.</p>
 
       <div class="concept-compare">
-        <div class="compare-card delta-vcs">
-          <h4 style="color: var(--accent-rose); margin-bottom: 0.5rem;">Delta-Based VCS (SVN, CVS)</h4>
+        <div class="compare-card con">
+          <h4 style="color: var(--accent-danger);">Delta-Based VCS (SVN, CVS)</h4>
           <p>Stores a baseline file and a series of change deltas for each revision. Branching copies whole directory trees on the central server.</p>
         </div>
-        <div class="compare-card git-vcs">
-          <h4 style="color: var(--accent-emerald); margin-bottom: 0.5rem;">Snapshot-Based DAG (Git)</h4>
+        <div class="compare-card pro">
+          <h4 style="color: var(--accent-success);">Snapshot-Based DAG (Git)</h4>
           <p>Every commit points to a full root filesystem snapshot. Unmodified files share exact SHA pointers (zero duplicated disk space).</p>
         </div>
       </div>
 
       <h2>2. What is a "DAG" in Git?</h2>
       <p><strong>DAG</strong> stands for <strong>Directed Acyclic Graph</strong>:</p>
-      <ul style="padding-left: 1.5rem; margin-bottom: 1.25rem; line-height: 1.8;">
+      <ul>
         <li><strong>Graph:</strong> A network of nodes (Commits) connected by edges.</li>
         <li><strong>Directed:</strong> Edges have a strict one-way direction: <em>children point back to their parent(s)</em>. A commit knows its parent, but a parent never knows what future commits branch off it.</li>
         <li><strong>Acyclic:</strong> It is mathematically impossible to have a loop or cycle. A commit cannot be its own ancestor.</li>
       </ul>
 
-      <div class="ascii-tree">
-Commit C3 (SHA: 9a2f...)  -->  points backwards to Parent C2
+      <div class="terminal-block">
+        <div class="terminal-header">
+          <span class="terminal-dot red"></span>
+          <span class="terminal-dot yellow"></span>
+          <span class="terminal-dot green"></span>
+          <span class="terminal-title">git graph topology</span>
+        </div>
+        <div class="terminal-body">Commit C3 (SHA: 9a2f...)  -->  points backwards to Parent C2
      |
      v (parent pointer)
 Commit C2 (SHA: 5d1e...)  -->  points backwards to Parent C1
      |
      v (parent pointer)
-Commit C1 (SHA: 1a0b...)  -->  Root commit (0 parents)
+Commit C1 (SHA: 1a0b...)  -->  Root commit (0 parents)</div>
       </div>
 
       <h2>3. What is a "Branch"?</h2>
       <p>A branch is nothing more than a <strong>movable named pointer</strong> pointing to a single commit node in the graph. When you create a branch:</p>
-      <div class="code-block">
-git branch feature
+      
+      <div class="terminal-block">
+        <div class="terminal-header">
+          <span class="terminal-dot red"></span>
+          <span class="terminal-dot yellow"></span>
+          <span class="terminal-dot green"></span>
+          <span class="terminal-title">bash</span>
+        </div>
+        <div class="terminal-body">$ git branch feature
+$ cat .git/refs/heads/feature
+9a2f64c810d2975975db3588ef11b7a69b7f584e</div>
       </div>
+
       <p>Git does <strong>not</strong> clone your files or duplicate your project. Git merely writes a 41-byte text file named <code>.git/refs/heads/feature</code> containing the SHA of your current commit! Making 10,000 branches in Git takes milliseconds and virtually zero memory.</p>
 
       <h2>4. Primary Source Reference</h2>
       <p>For deeper architectural reading, consult the primary source authority:</p>
-      <p>📖 <a href="https://git-scm.com/book/en/v2/Git-Internals-Git-Objects" target="_blank" style="color: var(--accent-cyan); font-weight: 600;">Pro Git Book (Chapter 10: Git Internals - Git Objects)</a> by Scott Chacon & Ben Straub.</p>
-      <p>📑 Also review our companion reference cheat sheet: <a href="../reference/git-dag-and-object-model.html" style="color: var(--accent-indigo);">Reference: Git DAG & Object Model Architecture</a>.</p>
+      <p>📖 <a href="https://git-scm.com/book/en/v2/Git-Internals-Git-Objects" target="_blank" style="font-weight: 600;">Pro Git Book (Chapter 10: Git Internals - Git Objects)</a> by Scott Chacon & Ben Straub.</p>
+      <p>📑 Also review our companion reference cheat sheet: <a href="../reference/git-dag-and-object-model.html">Reference: Git DAG & Object Model Architecture</a>.</p>
 
       <h2>5. Check Your Understanding</h2>
       <div class="exercise-box">
-        <h3 style="margin-bottom: 0.75rem;">Diagnostic Challenge</h3>
-        <p style="margin-bottom: 1rem;">Suppose you make a commit that modifies only 1 line in <code>README.md</code> inside a project containing 10,000 source files. How does Git represent this new commit in its DAG?</p>
+        <h3>Diagnostic Challenge</h3>
+        <p>Suppose you make a commit that modifies only 1 line in <code>README.md</code> inside a project containing 10,000 source files. How does Git represent this new commit in its DAG?</p>
 
-        <button class="quiz-option" onclick="handleQuiz(this, false)">
+        <button class="quiz-option" data-correct="false" onclick="handleQuizAnswer(this, false, 'quiz-expl-01', '', 'Git never duplicates unchanged files. It reuses existing tree/blob pointers.')">
           A. Git recalculates and stores 10,000 new file blobs to ensure an independent snapshot.
         </button>
-        <button class="quiz-option" onclick="handleQuiz(this, true)">
+        <button class="quiz-option" data-correct="true" onclick="handleQuizAnswer(this, true, 'quiz-expl-01', 'Git creates a full tree snapshot, but because 9,999 files were identical, their SHA hash did not change. Git simply reuses the existing tree/blob pointers. It is both a complete snapshot AND mathematically efficient.', '')">
           B. Git creates one new blob for README and points other files to previous SHA trees.
         </button>
-        <button class="quiz-option" onclick="handleQuiz(this, false)">
+        <button class="quiz-option" data-correct="false" onclick="handleQuizAnswer(this, false, 'quiz-expl-01', '', 'Git is not a diff-delta engine. It stores full tree snapshot pointers via content hashing.')">
           C. Git records a diff chunk file containing the line subtraction and line addition.
         </button>
 
-        <div id="quiz-explanation" style="display: none; margin-top: 1rem; padding: 1.1rem; border-radius: 8px; font-size: 0.92rem; font-weight: 500;"></div>
+        <div id="quiz-expl-01" style="display: none;"></div>
       </div>
 
       <div class="callout callout-reflection">
@@ -130,46 +108,6 @@ git branch feature
     </div>
   </div>
 
-  <script src="../assets/app.js"></script>
-  <script>
-    function handleQuiz(button, isCorrect) {
-      const container = button.parentElement;
-      const buttons = container.querySelectorAll('.quiz-option');
-      buttons.forEach(b => {
-        b.disabled = true;
-        b.style.cursor = 'default';
-      });
-
-      const explanation = document.getElementById('quiz-explanation');
-      explanation.style.display = 'block';
-
-      const isLight = document.documentElement.getAttribute('data-theme') === 'light';
-
-      if (isCorrect) {
-        button.classList.add('correct');
-        explanation.style.background = isLight ? 'rgba(16, 185, 129, 0.1)' : 'rgba(16, 185, 129, 0.18)';
-        explanation.style.border = '1px solid var(--accent-emerald)';
-        explanation.style.color = isLight ? '#065f46' : '#a7f3d0';
-        explanation.innerHTML = '<strong>Correct!</strong> Git creates a full tree snapshot, but because 9,999 files were identical, their SHA hash did not change. Git simply reuses the existing tree/blob pointers. It is both a complete snapshot AND mathematically efficient.';
-      } else {
-        button.classList.add('wrong');
-        buttons[1].classList.add('correct');
-        explanation.style.background = isLight ? 'rgba(244, 63, 94, 0.1)' : 'rgba(244, 63, 94, 0.18)';
-        explanation.style.border = '1px solid var(--accent-rose)';
-        explanation.style.color = isLight ? '#9f1239' : '#fecdd3';
-        explanation.innerHTML = '<strong>Notice:</strong> Git is a snapshot model, but it never blindly duplicates unchanged files. Option B is how Git achieves lightning-fast snapshotting through content addressing (identical content produces the exact same SHA-1 hash).';
-      }
-    }
-  </script>
-      } else {
-        button.classList.add('wrong');
-        buttons[1].classList.add('correct');
-        explanation.style.background = 'rgba(244, 63, 94, 0.15)';
-        explanation.style.border = '1px solid var(--accent-rose)';
-        explanation.style.color = '#fecdd3';
-        explanation.innerHTML = '<strong>Notice:</strong> Git is a snapshot model, but it never blindly duplicates unchanged files. Option B is how Git achieves lightning-fast snapshotting through content addressing (identical content produces the exact same SHA-1 hash).';
-      }
-    }
-  </script>
+  <script src="../assets/app.js?v=2.0"></script>
 </body>
 </html>

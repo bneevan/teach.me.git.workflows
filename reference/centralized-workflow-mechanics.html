@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reference: Centralized Workflow Mechanics</title>
+  <link rel="stylesheet" href="../assets/styles.css?v=2.0">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌿</text></svg>">
+</head>
+<body>
+  <div class="container lesson-container">
+    <div class="lesson-meta-bar">
+      <div>
+        <a href="../dashboard.html" style="font-size: 0.85rem; font-weight: 600;">← Back to Dashboard</a>
+        <h1 style="font-size: 1.85rem; margin-top: 0.4rem;">Reference Sheet: Centralized Git Workflow</h1>
+      </div>
+      <button class="btn btn-sm" onclick="toggleTheme()" id="theme-toggle-btn">☀️ Light</button>
+    </div>
+
+    <div class="lesson-content">
+      <div class="callout">
+        <div class="callout-title">💡 The Centralized Model Principle</div>
+        <p>A single branch (<code>main</code>) acts as the central hub. Every developer works locally on <code>main</code> and attempts to push directly to the central remote repository.</p>
+      </div>
+
+      <h2>1. The Non-Fast-Forward Conflict Cycle</h2>
+      <div class="terminal-block">
+        <div class="terminal-header">
+          <span class="terminal-dot red"></span>
+          <span class="terminal-dot yellow"></span>
+          <span class="terminal-dot green"></span>
+          <span class="terminal-title">push contention breakdown</span>
+        </div>
+        <div class="terminal-body">1. Alice and Bob both clone commit C1:
+   Remote main: (C1)
+
+2. Alice commits C2 and pushes:
+   Remote main: (C1) <--- (C2) [Alice]
+
+3. Bob commits C3 locally and attempts to push:
+   Bob's local: (C1) <--- (C3)
+   Remote rejects Bob: [rejected - non-fast-forward]
+   Because Remote's HEAD (C2) is NOT in Bob's ancestor chain!</div>
+      </div>
+
+      <h2>2. Resolving the Push: Merge vs Rebase</h2>
+      <div class="concept-compare">
+        <div class="compare-card con">
+          <h4 style="color: var(--accent-danger);">Option A: git pull (Merge)</h4>
+          <p>Creates a merge commit tying Bob's C3 and Alice's C2 together.</p>
+          <code style="display: block; margin: 0.5rem 0;">$ git pull origin main</code>
+          <p style="font-size: 0.82rem; color: var(--text-muted);">Trade-off: Clutters history with repetitive "Merge branch 'main'" bubble commits.</p>
+        </div>
+        <div class="compare-card pro">
+          <h4 style="color: var(--accent-success);">Option B: git pull --rebase</h4>
+          <p>Lifts Bob's C3 off C1 and replays it cleanly on top of Alice's C2 as C3'.</p>
+          <code style="display: block; margin: 0.5rem 0;">$ git pull --rebase origin main</code>
+          <p style="font-size: 0.82rem; color: var(--text-muted);">Trade-off: Rewrites local commit hashes; requires clean working directory.</p>
+        </div>
+      </div>
+
+      <h2>3. When is Centralized Workflow Appropriate?</h2>
+      <ul>
+        <li><strong>Solo developers or pairs (1–2 developers):</strong> Zero branching overhead, instant release feedback.</li>
+        <li><strong>Teams migrating from SVN:</strong> Eases the transition to distributed version control without learning branch topologies immediately.</li>
+        <li><strong>When it fails:</strong> Once 3+ developers commit simultaneously, engineers spend more time resolving push-rejections and rebasing than writing code.</li>
+      </ul>
+    </div>
+  </div>
+  <script src="../assets/app.js?v=2.0"></script>
+</body>
+</html>

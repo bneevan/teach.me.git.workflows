@@ -315,6 +315,41 @@ document.addEventListener('keydown', (e) => {
   }
 });
 
+// Reusable Interactive Quiz Engine
+function handleQuizAnswer(button, isCorrect, explanationId, correctExplanation, incorrectExplanation) {
+  const container = button.closest('.exercise-box');
+  const buttons = container.querySelectorAll('.quiz-option');
+  buttons.forEach(b => {
+    b.disabled = true;
+    b.style.cursor = 'default';
+  });
+
+  const explanationElem = document.getElementById(explanationId);
+  if (!explanationElem) return;
+
+  explanationElem.style.display = 'block';
+  explanationElem.className = 'quiz-feedback';
+
+  if (isCorrect) {
+    button.classList.add('correct');
+    explanationElem.style.background = 'var(--accent-success-bg)';
+    explanationElem.style.border = '1.5px solid var(--accent-success-border)';
+    explanationElem.style.color = 'var(--accent-success-text)';
+    explanationElem.innerHTML = `<strong>✓ Correct!</strong> ${correctExplanation}`;
+  } else {
+    button.classList.add('wrong');
+    buttons.forEach(b => {
+      if (b.getAttribute('data-correct') === 'true') {
+        b.classList.add('correct');
+      }
+    });
+    explanationElem.style.background = 'var(--accent-danger-bg)';
+    explanationElem.style.border = '1.5px solid var(--accent-danger-border)';
+    explanationElem.style.color = 'var(--accent-danger-text)';
+    explanationElem.innerHTML = `<strong>✕ Incorrect.</strong> ${incorrectExplanation}`;
+  }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   initTheme();
   loadSavedKnownCards();
