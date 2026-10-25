@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Engineering Git Workflows — Interactive Course Dashboard</title>
-  <link rel="stylesheet" href="assets/styles.css?v=2.0">
+  <link rel="stylesheet" href="assets/styles.css?v=2.1">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌿</text></svg>">
 </head>
 <body>
@@ -69,88 +69,120 @@
       </div>
 
       <div class="module-grid">
-        <!-- Module 0 -->
+        <!-- Module 00 -->
         <div class="module-card">
           <div class="module-top">
             <span class="module-num">MOD 00</span>
-            <span class="status-badge active">✓ Completed</span>
+            <span class="status-badge completed">✓ Completed</span>
           </div>
-          <h3 class="module-title">Foundations: The Git DAG & Snapshots</h3>
+          <h3 class="module-title">Foundations: DAG & Snapshots</h3>
           <p class="module-desc">Directed Acyclic Graphs (DAG), tree snapshots vs file deltas, parent pointer directions, and why branches are 41-byte text pointers.</p>
+          
+          <div class="module-lessons-group">
+            <div class="lessons-header-text">Lessons:</div>
+            <div class="lesson-pill-row">
+              <a href="lessons/0001-the-git-dag-and-snapshots.html" class="lesson-pill completed">01. DAG & Snapshots ✓</a>
+            </div>
+          </div>
+
           <div class="module-tags">
             <span class="tag">DAG Topology</span>
             <span class="tag">Snapshots</span>
             <span class="tag">Refs & HEAD</span>
-            <span class="tag">Object Model</span>
           </div>
+
           <div class="module-footer">
-            <a href="reference/git-dag-and-object-model.html" class="btn btn-sm">📑 Reference Sheet</a>
+            <a href="reference/git-dag-and-object-model.html" class="btn btn-sm">📑 Reference</a>
             <a href="lessons/0001-the-git-dag-and-snapshots.html" class="btn btn-sm btn-primary">Open Lesson 01 →</a>
           </div>
         </div>
 
-        <!-- Module 1 -->
+        <!-- Module 01 -->
         <div class="module-card">
           <div class="module-top">
             <span class="module-num">MOD 01</span>
-            <span class="status-badge active">✓ Completed</span>
+            <span class="status-badge completed">✓ Completed</span>
           </div>
-          <h3 class="module-title">Centralized Workflow & Push Contention</h3>
-          <p class="module-desc">The SVN transition model. Single main branch, lockstep collaboration, local rebasing, push rejection loops, and why teams outgrow it as headcount scales.</p>
+          <h3 class="module-title">Centralized & Push Contention</h3>
+          <p class="module-desc">The SVN transition model. Single main branch, lockstep collaboration, local rebasing, push rejection loops, and why teams outgrow it.</p>
+          
+          <div class="module-lessons-group">
+            <div class="lessons-header-text">Lessons:</div>
+            <div class="lesson-pill-row">
+              <a href="lessons/0002-centralized-workflow-and-push-rejections.html" class="lesson-pill completed">02. Push Contention ✓</a>
+            </div>
+          </div>
+
           <div class="module-tags">
             <span class="tag">Central Remote</span>
             <span class="tag">Non-Fast-Forward</span>
             <span class="tag">Pull --rebase</span>
-            <span class="tag">Push Races</span>
           </div>
+
           <div class="module-footer">
-            <a href="reference/centralized-workflow-mechanics.html" class="btn btn-sm">📑 Reference Sheet</a>
-            <a href="lessons/0002-centralized-workflow-and-push-rejections.html" class="btn btn-sm">Open Lesson 02 →</a>
+            <a href="reference/centralized-workflow-mechanics.html" class="btn btn-sm">📑 Reference</a>
+            <a href="lessons/0002-centralized-workflow-and-push-rejections.html" class="btn btn-sm btn-primary">Open Lesson 02 →</a>
           </div>
         </div>
 
-        <!-- Module 2 -->
+        <!-- Module 02 -->
         <div class="module-card">
           <div class="module-top">
             <span class="module-num">MOD 02</span>
-            <span class="status-badge active">✓ Completed</span>
+            <span class="status-badge completed">✓ Completed</span>
           </div>
-          <h3 class="module-title">Feature Branching & Investigation Tools</h3>
-          <p class="module-desc">Lightweight topic branches, Pull Request lifecycle, branch protection rules, Squash vs Merge, and forensic debugging with git bisect, blame, and reflog.</p>
+          <h3 class="module-title">Feature Branching & Investigation</h3>
+          <p class="module-desc">Topic branches, Pull Request lifecycle, branch protection rules, Squash vs Merge, and forensic debugging with git bisect, blame, and reflog.</p>
+          
+          <div class="module-lessons-group">
+            <div class="lessons-header-text">Lessons:</div>
+            <div class="lesson-pill-row">
+              <a href="lessons/0003-feature-branches-and-github-flow.html" class="lesson-pill completed">03. GitHub Flow ✓</a>
+              <a href="lessons/0004-git-investigation-tools-and-atomic-commits.html" class="lesson-pill completed">04. Forensic Tools ✓</a>
+            </div>
+          </div>
+
           <div class="module-tags">
             <span class="tag">Topic Branches</span>
             <span class="tag">Squash & Merge</span>
             <span class="tag">git bisect</span>
-            <span class="tag">git reflog</span>
           </div>
-          <div class="module-footer" style="flex-wrap: wrap; gap: 0.5rem;">
+
+          <div class="module-footer">
             <a href="reference/feature-branching-and-github-flow.html" class="btn btn-sm">📑 Reference</a>
-            <a href="lessons/0003-feature-branches-and-github-flow.html" class="btn btn-sm">Lesson 03</a>
-            <a href="lessons/0004-git-investigation-tools-and-atomic-commits.html" class="btn btn-sm">Lesson 04</a>
+            <a href="lessons/0004-git-investigation-tools-and-atomic-commits.html" class="btn btn-sm btn-primary">Review Module →</a>
           </div>
         </div>
 
-        <!-- Module 3 -->
-        <div class="module-card" style="border-color: var(--accent-primary);">
+        <!-- Module 03 -->
+        <div class="module-card is-active">
           <div class="module-top">
             <span class="module-num">MOD 03</span>
-            <span class="status-badge active">● Active Lesson 05</span>
+            <span class="status-badge active">● Active Phase</span>
           </div>
           <h3 class="module-title">Trunk-Based Development (TBD)</h3>
           <p class="module-desc">High-velocity engineering at Google and Meta scale. Sub-24h branches, continuous integration discipline, Feature Toggles, and Branch by Abstraction.</p>
+          
+          <div class="module-lessons-group">
+            <div class="lessons-header-text">Lessons:</div>
+            <div class="lesson-pill-row">
+              <a href="lessons/0005-trunk-based-development-and-feature-flags.html" class="lesson-pill active">05. Trunk & Flags ●</a>
+            </div>
+          </div>
+
           <div class="module-tags">
             <span class="tag">Single Trunk</span>
             <span class="tag">Feature Flags</span>
-            <span class="tag">Branch by Abstraction</span>
             <span class="tag">Fast CI Gates</span>
           </div>
+
           <div class="module-footer">
-            <a href="reference/trunk-based-development.html" class="btn btn-sm">📑 Reference Sheet</a>
+            <a href="reference/trunk-based-development.html" class="btn btn-sm">📑 Reference</a>
             <a href="lessons/0005-trunk-based-development-and-feature-flags.html" class="btn btn-sm btn-primary">Open Lesson 05 →</a>
           </div>
         </div>
 
-        <!-- Module 4 -->
+        <!-- Module 04 -->
         <div class="module-card">
           <div class="module-top">
             <span class="module-num">MOD 04</span>
@@ -158,55 +190,83 @@
           </div>
           <h3 class="module-title">Gitflow & Scheduled Releases</h3>
           <p class="module-desc">The dual-branch spine (main + develop), release hardening tracks, hotfix branches off production, SemVer synchronization, and when NOT to use it.</p>
+          
+          <div class="module-lessons-group">
+            <div class="lessons-header-text">Lessons:</div>
+            <div class="lesson-pill-row">
+              <span class="lesson-pill" style="opacity: 0.7;">06. Dual-Branch Gitflow</span>
+            </div>
+          </div>
+
           <div class="module-tags">
             <span class="tag">Develop vs Main</span>
-            <span class="tag">Release Branches</span>
-            <span class="tag">Hotfix Backports</span>
-            <span class="tag">Batch Cadence</span>
+            <span class="tag">Release Tracks</span>
+            <span class="tag">Hotfixes</span>
           </div>
+
           <div class="module-footer">
-            <span style="font-size: 0.8rem; color: var(--text-muted);">Queued</span>
+            <span class="btn btn-sm" style="opacity: 0.6; cursor: not-allowed;">📑 Locked</span>
+            <span class="btn btn-sm" style="opacity: 0.6; cursor: not-allowed;">Next Up</span>
           </div>
         </div>
 
-        <!-- Module 5 -->
+        <!-- Module 05 -->
         <div class="module-card">
           <div class="module-top">
             <span class="module-num">MOD 05</span>
             <span class="status-badge upcoming">Upcoming</span>
           </div>
-          <h3 class="module-title">Fork-and-Pull-Request (Open Source)</h3>
-          <p class="module-desc">Distributed trust boundaries. Upstream vs Origin remotes, rebase syncing, maintainer triage, CI security risks with untrusted pull requests, and CLA checks.</p>
+          <h3 class="module-title">Fork & Pull Request (OSS)</h3>
+          <p class="module-desc">Distributed trust boundaries. Upstream vs Origin remotes, rebase syncing, maintainer triage, CI security risks with untrusted PRs, and CLA checks.</p>
+          
+          <div class="module-lessons-group">
+            <div class="lessons-header-text">Lessons:</div>
+            <div class="lesson-pill-row">
+              <span class="lesson-pill" style="opacity: 0.7;">07. Upstream Remotes</span>
+            </div>
+          </div>
+
           <div class="module-tags">
             <span class="tag">Upstream Remotes</span>
-            <span class="tag">Untrusted Code Gates</span>
-            <span class="tag">Maintainer Governance</span>
+            <span class="tag">Untrusted Gates</span>
+            <span class="tag">OSS Governance</span>
           </div>
+
           <div class="module-footer">
-            <span style="font-size: 0.8rem; color: var(--text-muted);">Queued</span>
+            <span class="btn btn-sm" style="opacity: 0.6; cursor: not-allowed;">📑 Locked</span>
+            <span class="btn btn-sm" style="opacity: 0.6; cursor: not-allowed;">Queued</span>
           </div>
         </div>
 
-        <!-- Module 6 -->
+        <!-- Module 06 -->
         <div class="module-card">
           <div class="module-top">
             <span class="module-num">MOD 06</span>
             <span class="status-badge upcoming">Upcoming</span>
           </div>
-          <h3 class="module-title">Release Management & Semantic Versioning</h3>
+          <h3 class="module-title">Release Management & SemVer</h3>
           <p class="module-desc">SemVer 2.0.0 contracts, Conventional Commits automation, annotated Git tags, release candidates, changelog generation, and surgical cherry-picks.</p>
+          
+          <div class="module-lessons-group">
+            <div class="lessons-header-text">Lessons:</div>
+            <div class="lesson-pill-row">
+              <span class="lesson-pill" style="opacity: 0.7;">08. SemVer & Tags</span>
+            </div>
+          </div>
+
           <div class="module-tags">
             <span class="tag">SemVer 2.0</span>
             <span class="tag">Conventional Commits</span>
-            <span class="tag">Annotated Tags</span>
-            <span class="tag">Release-Please</span>
+            <span class="tag">Tags</span>
           </div>
+
           <div class="module-footer">
-            <span style="font-size: 0.8rem; color: var(--text-muted);">Queued</span>
+            <span class="btn btn-sm" style="opacity: 0.6; cursor: not-allowed;">📑 Locked</span>
+            <span class="btn btn-sm" style="opacity: 0.6; cursor: not-allowed;">Queued</span>
           </div>
         </div>
 
-        <!-- Module 7 -->
+        <!-- Module 07 -->
         <div class="module-card">
           <div class="module-top">
             <span class="module-num">MOD 07</span>
@@ -214,33 +274,51 @@
           </div>
           <h3 class="module-title">Monorepos vs Polyrepos</h3>
           <p class="module-desc">Single source of truth for cross-project code. Atomic refactoring, sparse checkout, affected build graph analysis (Nx/Bazel/Turborepo), and CODEOWNERS boundaries.</p>
+          
+          <div class="module-lessons-group">
+            <div class="lessons-header-text">Lessons:</div>
+            <div class="lesson-pill-row">
+              <span class="lesson-pill" style="opacity: 0.7;">09. Monorepo Tools</span>
+            </div>
+          </div>
+
           <div class="module-tags">
             <span class="tag">Atomic Refactoring</span>
             <span class="tag">CODEOWNERS</span>
-            <span class="tag">Sparse Checkout</span>
             <span class="tag">Affected Graph</span>
           </div>
+
           <div class="module-footer">
-            <span style="font-size: 0.8rem; color: var(--text-muted);">Queued</span>
+            <span class="btn btn-sm" style="opacity: 0.6; cursor: not-allowed;">📑 Locked</span>
+            <span class="btn btn-sm" style="opacity: 0.6; cursor: not-allowed;">Queued</span>
           </div>
         </div>
 
-        <!-- Module 8 -->
+        <!-- Module 08 -->
         <div class="module-card">
           <div class="module-top">
             <span class="module-num">MOD 08</span>
             <span class="status-badge upcoming">Upcoming</span>
           </div>
-          <h3 class="module-title">GitOps & Declarative Operations</h3>
+          <h3 class="module-title">GitOps & Declarative Delivery</h3>
           <p class="module-desc">Git as the authoritative state for cloud-native systems. In-cluster reconciliation agents (ArgoCD/Flux), immutable commit digests, and promotion patterns without branch drift.</p>
+          
+          <div class="module-lessons-group">
+            <div class="lessons-header-text">Lessons:</div>
+            <div class="lesson-pill-row">
+              <span class="lesson-pill" style="opacity: 0.7;">10. GitOps & ArgoCD</span>
+            </div>
+          </div>
+
           <div class="module-tags">
             <span class="tag">OpenGitOps</span>
             <span class="tag">ArgoCD / Flux</span>
-            <span class="tag">Drift Reconciliation</span>
-            <span class="tag">Environment Folders</span>
+            <span class="tag">Reconciliation</span>
           </div>
+
           <div class="module-footer">
-            <span style="font-size: 0.8rem; color: var(--text-muted);">Queued</span>
+            <span class="btn btn-sm" style="opacity: 0.6; cursor: not-allowed;">📑 Locked</span>
+            <span class="btn btn-sm" style="opacity: 0.6; cursor: not-allowed;">Queued</span>
           </div>
         </div>
       </div>
@@ -407,6 +485,6 @@
 
   </div>
 
-  <script src="assets/app.js?v=2.0"></script>
+  <script src="assets/app.js?v=2.1"></script>
 </body>
 </html>
