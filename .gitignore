@@ -46,3 +46,7 @@ build/
 tmp/
 temp/
 scratch/
+
+# Private Learning Records (kept local)
+learning-records/
+

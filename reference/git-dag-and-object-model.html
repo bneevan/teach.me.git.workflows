@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reference: Git DAG & Object Model Architecture</title>
+  <link rel="stylesheet" href="../assets/styles.css">
+  <style>
+    .diagram-box {
+      background: #090d16;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      line-height: 1.45;
+      overflow-x: auto;
+      color: #38bdf8;
+    }
+    .ref-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.25rem;
+      margin: 1.5rem 0;
+    }
+    .ref-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 1.25rem;
+    }
+    .ref-card h4 {
+      color: var(--accent-emerald);
+      margin-bottom: 0.5rem;
+      font-size: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="container lesson-container">
+    <div class="lesson-meta-bar">
+      <div>
+        <a href="../dashboard.html" style="color: var(--accent-cyan); text-decoration: none; font-size: 0.85rem;">← Back to Dashboard</a>
+        <h1 style="font-size: 1.8rem; margin-top: 0.5rem;">Reference Sheet: Git's DAG & Object Model</h1>
+      </div>
+      <button class="btn btn-sm" onclick="toggleTheme()" id="theme-toggle-btn">☀️ Light</button>
+    </div>
+
+    <div class="lesson-content">
+      <div class="callout">
+        <div class="callout-title">💡 The Immutable Law of Git</div>
+        <p>Git does <strong>not</strong> track file diffs or deltas. Git tracks <strong>snapshots</strong> in an immutable, content-addressed Directed Acyclic Graph (DAG). Every commit points backwards to its parent(s).</p>
+      </div>
+
+      <h2>1. The Four Fundamental Git Objects</h2>
+      <div class="ref-grid">
+        <div class="ref-card">
+          <h4>1. Blob (Binary Large Object)</h4>
+          <p>Stores raw file contents only. No file name, no timestamp, no file permissions.</p>
+          <code>SHA = hash(size + content)</code>
+        </div>
+        <div class="ref-card">
+          <h4>2. Tree</h4>
+          <p>Represents a directory. Maps file names, modes, and permissions to Blob SHAs or nested Tree SHAs.</p>
+          <code>100644 blob a1b2... main.py</code>
+        </div>
+        <div class="ref-card">
+          <h4>3. Commit</h4>
+          <p>A small text metadata file pointing to a root Tree SHA, parent commit SHA(s), author, committer, and message.</p>
+          <code>tree 7f8a...<br>parent 3b2c...</code>
+        </div>
+        <div class="ref-card">
+          <h4>4. Annotated Tag</h4>
+          <p>An immutable pointer to a specific commit, containing a tagger name, date, and verification message/PGP signature.</p>
+          <code>object 4c1d... tag v1.0.0</code>
+        </div>
+      </div>
+
+      <h2>2. Directed Acyclic Graph (DAG) Anatomy</h2>
+      <div class="diagram-box">
+HEAD -> [ main ] (pointer)
+            |
+            v
+       (Commit C3)  [hash: 9a2f] -> points to [Tree 88cc] (Full Snapshot)
+            |
+         parent
+            v
+       (Commit C2)  [hash: 5d1e] -> points to [Tree 44bb]
+            |
+         parent
+            v
+       (Commit C1)  [hash: 1a0b] (Initial commit, zero parents)
+      </div>
+
+      <h2>3. What is a "Branch" Really?</h2>
+      <p>In Git, a branch is <strong>not</strong> a directory of copied files. A branch is simply a <strong>41-byte text file</strong> in <code>.git/refs/heads/&lt;name&gt;</code> containing the 40-character hexadecimal SHA-1 (or 64-character SHA-256) of its latest commit!</p>
+      <div class="code-block">
+$ cat .git/refs/heads/main
+9a2f64c810d2975975db3588ef11b7a69b7f584e
+      </div>
+      <p>Moving a branch or making a new branch has <strong>O(1)</strong> constant time complexity and costs virtually zero disk space.</p>
+    </div>
+  </div>
+  <script src="../assets/app.js"></script>
+</body>
+</html>
