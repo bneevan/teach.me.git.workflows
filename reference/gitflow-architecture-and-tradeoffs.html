@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reference: Gitflow Architecture & Trade-Offs</title>
+  <link rel="stylesheet" href="../assets/styles.css?v=2.2">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌿</text></svg>">
+</head>
+<body>
+  <div class="container lesson-container">
+    <div class="lesson-meta-bar">
+      <div>
+        <a href="../dashboard.html" style="font-size: 0.85rem; font-weight: 600;">← Back to Dashboard</a>
+        <h1 style="font-size: 1.85rem; margin-top: 0.4rem;">Reference Sheet: Gitflow Architecture & Trade-Offs</h1>
+      </div>
+      <button class="btn btn-sm" onclick="toggleTheme()" id="theme-toggle-btn">☀️ Light</button>
+    </div>
+
+    <div class="lesson-content">
+      <div class="callout">
+        <div class="callout-title">💡 The Core Gitflow Law</div>
+        <p>Gitflow introduces a <strong>dual-branch permanent spine</strong>: <code>main</code> strictly reflects production-released code, while <code>develop</code> aggregates completed features for the next release batch. Supporting branches (<code>feature/*</code>, <code>release/*</code>, <code>hotfix/*</code>) manage scheduled delivery lifecycles.</p>
+      </div>
+
+      <h2>1. The Five Branch Types in Gitflow</h2>
+      <div class="concept-compare">
+        <div class="compare-card">
+          <h4 style="color: var(--accent-primary);">1. main (Permanent)</h4>
+          <p>Every commit on <code>main</code> is an official tagged release (e.g. <code>v1.0.0</code>). Developers never commit directly to <code>main</code>.</p>
+        </div>
+        <div class="compare-card">
+          <h4 style="color: var(--accent-cyan);">2. develop (Permanent)</h4>
+          <p>The daily integration branch. Serves as the base for all feature branches and the origin of upcoming release branches.</p>
+        </div>
+        <div class="compare-card">
+          <h4 style="color: var(--accent-purple);">3. feature/* (Temporary)</h4>
+          <p>Forks off: <code>develop</code><br>Merges back into: <code>develop</code><br>Lifespan: Duration of feature work.</p>
+        </div>
+        <div class="compare-card">
+          <h4 style="color: var(--accent-warning);">4. release/* (Temporary)</h4>
+          <p>Forks off: <code>develop</code><br>Merges back into: <strong>BOTH</strong> <code>main</code> AND <code>develop</code><br>Purpose: Stabilization, version bump, bug fixes only.</p>
+        </div>
+        <div class="compare-card con">
+          <h4 style="color: var(--accent-danger);">5. hotfix/* (Temporary)</h4>
+          <p>Forks off: <code>main</code> (production tag)<br>Merges back into: <strong>BOTH</strong> <code>main</code> AND <code>develop</code><br>Purpose: Urgent production defect repair.</p>
+        </div>
+      </div>
+
+      <h2>2. Complete Gitflow Topology Diagram</h2>
+      <div class="terminal-block">
+        <div class="terminal-header">
+          <span class="terminal-dot red"></span>
+          <span class="terminal-dot yellow"></span>
+          <span class="terminal-dot green"></span>
+          <span class="terminal-title">gitflow graph topology</span>
+        </div>
+        <div class="terminal-body">[main]    (v1.0) -------------------------------- (v1.1) ----------- (v1.1.1)
+                     \                                  ^                 ^
+                      \                                / (release merge) / (hotfix merge)
+[release/1.1]          \                    (RC1)---(RC2)               /
+                        \                  /                           /
+[develop]         (C1) ---------- (C2) ---+-----------------(M2) <----+ (backport!)
+                    \              /                         ^
+                     \-- (F1)-(F2)/ (feature merge)          |
+[hotfix/1.1.1]                                               \-- (H1) [branched off main]</div>
+      </div>
+
+      <h2>3. The Mandatory Dual-Backport Rule</h2>
+      <p>When closing a <code>release/*</code> or <code>hotfix/*</code> branch, Gitflow strictly dictates merging into <strong>TWO places</strong>:</p>
+      <ol style="padding-left: 1.5rem; line-height: 1.8; margin-bottom: 1.5rem;">
+        <li>Merge into <code>main</code> and tag the release version (e.g. <code>git tag -a v1.1.1</code>).</li>
+        <li><strong>Backport-merge into <code>develop</code> immediately!</strong></li>
+      </ol>
+      <div class="callout" style="border-left-color: var(--accent-danger);">
+        <div class="callout-title" style="color: var(--accent-danger);">⚠️ The Classic Regression Trap</div>
+        <p>If an engineer fixes an emergency bug in <code>hotfix/1.1.1</code>, merges it into <code>main</code>, but forgets to merge it into <code>develop</code>, the bug will <strong>re-appear in production</strong> the moment the next scheduled release (<code>v1.2.0</code>) deploys!</p>
+      </div>
+
+      <h2>4. Architectural Trade-Off Matrix</h2>
+      <ul style="padding-left: 1.5rem; line-height: 1.8;">
+        <li><strong>Where Gitflow Excels:</strong> Traditional packaged software, mobile apps with App Store review latency, and enterprise software requiring multi-version long-term support (LTS) maintenance (e.g. maintaining v2.4 patches while developing v3.0).</li>
+        <li><strong>Where Gitflow Fails (Anti-Pattern):</strong> Continuous Web Services / SaaS. Maintaining separate <code>develop</code>, <code>main</code>, and <code>release</code> branches creates merge overhead, slows deployment frequency to weeks, and conflicts with automated CI/CD.</li>
+      </ul>
+    </div>
+  </div>
+  <script src="../assets/app.js?v=2.2"></script>
+</body>
+</html>

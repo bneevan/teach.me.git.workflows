@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 06: Gitflow & Scheduled Releases</title>
+  <link rel="stylesheet" href="../assets/styles.css?v=2.2">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌿</text></svg>">
+</head>
+<body>
+  <div class="container lesson-container">
+    <div class="lesson-meta-bar">
+      <div>
+        <a href="../dashboard.html" style="font-size: 0.85rem; font-weight: 600;">← Back to Dashboard</a>
+        <h1 style="font-size: 1.85rem; margin-top: 0.4rem;">Lesson 06: Gitflow & Scheduled Releases</h1>
+      </div>
+      <button class="btn btn-sm" onclick="toggleTheme()" id="theme-toggle-btn">☀️ Light</button>
+    </div>
+
+    <div class="lesson-content">
+      <div class="callout">
+        <div class="callout-title">🎯 Single Tangible Win for this Lesson</div>
+        <p>Master how <strong>Gitflow</strong> orchestrates complex multi-version release cycles using two permanent branches (<code>main</code> and <code>develop</code>), and learn why the creator of Gitflow himself warned teams against using it for modern continuous web applications.</p>
+      </div>
+
+      <h2>1. The World Gitflow Was Designed For</h2>
+      <p>In 2010, software engineer Vincent Driessen published a blog post titled <em>"A successful Git branching model"</em>. It quickly became known worldwide as <strong>Gitflow</strong>.</p>
+      <p>To understand Gitflow, you must understand the world of 2010: software was shipped as <strong>discrete, versioned batches</strong> (desktop installers, CD-ROMs, enterprise on-premise software, mobile apps waiting for App Store approvals). You could not continuously deploy 20 times a day to someone's desktop.</p>
+
+      <h2>2. The Dual-Branch Spine</h2>
+      <p>Instead of having just one permanent branch like GitHub Flow or Trunk-Based Development, Gitflow uses two infinite-lifetime branches:</p>
+
+      <div class="concept-compare">
+        <div class="compare-card">
+          <h4 style="color: var(--accent-primary);">main</h4>
+          <p>Strictly reflects what is currently running in production. Only receives merges from <code>release/*</code> or <code>hotfix/*</code> branches. Every commit on <code>main</code> is tagged with a Semantic Version (e.g. <code>v1.2.0</code>).</p>
+        </div>
+        <div class="compare-card">
+          <h4 style="color: var(--accent-cyan);">develop</h4>
+          <p>The shared staging/integration branch for developers. All <code>feature/*</code> branches branch off <code>develop</code> and merge back into <code>develop</code> once ready.</p>
+        </div>
+      </div>
+
+      <h2>3. The Release Cycle: Feature Freeze & Hardening</h2>
+      <p>When the team decides it is time to prepare Version 2.0, they branch off <code>develop</code>:</p>
+      
+      <div class="terminal-block">
+        <div class="terminal-header">
+          <span class="terminal-dot red"></span>
+          <span class="terminal-dot yellow"></span>
+          <span class="terminal-dot green"></span>
+          <span class="terminal-title">gitflow release workflow</span>
+        </div>
+        <div class="terminal-body">1. Fork release branch off develop:
+   $ git checkout -b release/2.0.0 develop
+
+2. Feature Freeze in effect:
+   - NO new features allowed on release/2.0.0!
+   - Developers continue building v2.1 features on develop.
+   - Only bug fixes, documentation, and version bumps go into release/2.0.0.
+
+3. Complete the release:
+   - Merge release/2.0.0 into main -> Tag: v2.0.0
+   - Merge release/2.0.0 into develop (so bug fixes aren't lost!)
+   - Delete release/2.0.0 branch.</div>
+      </div>
+
+      <h2>4. The Hotfix Emergency Track</h2>
+      <p>What if a critical security vulnerability is found in production <code>v2.0.0</code> while <code>develop</code> contains 50 unfinished, untested features for <code>v2.1</code>?</p>
+      <p>You cannot deploy <code>develop</code>. In Gitflow, you branch <strong>directly off <code>main</code></strong>:</p>
+      <code>$ git checkout -b hotfix/2.0.1 main</code>
+      <p style="margin-top: 0.75rem;">You patch the bug, test it against production state, and then execute the <strong>Dual-Backport Rule</strong>:</p>
+      <ul>
+        <li>Merge into <code>main</code> and tag <code>v2.0.1</code> -> Deploy to production immediately.</li>
+        <li>Merge into <code>develop</code> -> Ensures the next release doesn't accidentally reintroduce the bug.</li>
+      </ul>
+
+      <h2>5. The 2020 Epilogue: Why Not Web Apps?</h2>
+      <p>In 2020, Vincent Driessen added a prominent warning note to his original 2010 post:</p>
+      <div class="callout" style="border-left-color: var(--accent-warning);">
+        <div class="callout-title" style="color: var(--accent-warning);">📢 Note from the Author (2020)</div>
+        <p><em>"Web applications are typically delivered continuously, not rolled back, and you don’t have to support multiple versions of software running in the wild... If your team is doing continuous delivery, I suggest adopting a much simpler workflow (like GitHub Flow) instead of trying to shoehorn Gitflow into your team."</em></p>
+      </div>
+
+      <h2>6. Primary Source Authority</h2>
+      <p>📖 <a href="https://nvie.com/posts/a-successful-git-branching-model/" target="_blank" style="font-weight: 600;">"A successful Git branching model" (Original Gitflow Proposal)</a> by Vincent Driessen.</p>
+      <p>📑 Companion Reference: <a href="../reference/gitflow-architecture-and-tradeoffs.html">Reference Sheet: Gitflow Architecture & Trade-Offs</a>.</p>
+
+      <h2>7. Check Your Understanding</h2>
+      <div class="exercise-box">
+        <h3>Scenario Challenge</h3>
+        <p>An on-call engineer fixes a severe production bug by creating branch <code>hotfix/1.4.1</code> off <code>main</code>, tests it, merges it into <code>main</code>, and tags <code>v1.4.1</code>. Two weeks later, the team ships scheduled release <code>v1.5.0</code> from <code>develop</code>, and the exact same bug re-appears in production! What went wrong?</p>
+
+        <button class="quiz-option" data-correct="false" onclick="handleQuizAnswer(this, false, 'quiz-expl-06', '', 'Hotfixes must originate from main, not develop, because develop contains unreleased features.')">
+          A. The hotfix should have branched off develop instead of branching directly off main.
+        </button>
+        <button class="quiz-option" data-correct="true" onclick="handleQuizAnswer(this, true, 'quiz-expl-06', 'The engineer forgot the dual-backport rule! Failing to merge the hotfix into develop means develop never received the fix, so the next release from develop overwrote production with the old bug.', '')">
+          B. The engineer forgot to merge the hotfix into develop, so the next scheduled release regressed.
+        </button>
+        <button class="quiz-option" data-correct="false" onclick="handleQuizAnswer(this, false, 'quiz-expl-06', '', 'Git tags are pointers only; tagging does not prevent code regressions.')">
+          C. The engineer should have deleted the v1.4.0 tag before creating the new v1.4.1 tag.
+        </button>
+
+        <div id="quiz-expl-06" style="display: none;"></div>
+      </div>
+
+      <div class="callout callout-reflection">
+        <div class="callout-title">💬 Socratic Reflection with Your Assistant</div>
+        <p>Notice how Gitflow maintains separate branches for different software states (<code>main</code> for production, <code>develop</code> for next release, <code>release/*</code> for stabilization). How does this compare to Trunk-Based Development where everything lives in a single branch and states are controlled by Feature Flags?</p>
+      </div>
+    </div>
+  </div>
+
+  <script src="../assets/app.js?v=2.2"></script>
+</body>
+</html>

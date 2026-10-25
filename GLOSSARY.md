@@ -78,5 +78,28 @@ _Avoid_: Feature switch, config flag
 A refactoring technique that introduces an abstraction layer around legacy code, builds a new implementation alongside it in trunk, and flips the dependency once ready.
 _Avoid_: In-place replacement, refactor branch
 
+**Feature Flag Debt (Dead Flag)**:
+Technical debt accumulated when a temporary feature toggle is left in production code after the feature is 100% rolled out or deprecated.
+_Avoid_: Stale toggle, old switch
+
+**Kill Switch**:
+A configuration toggle that instantly disables a failing component or third-party service in production at runtime without requiring code deployment.
+_Avoid_: Circuit breaker (in networking), emergency button
+
+## Multi-Branch Scheduled Workflows (Gitflow)
+
+**Gitflow**:
+A strict, branch-heavy workflow using two permanent branches (`main` and `develop`) plus temporary feature, release, and hotfix branches tailored for scheduled batch releases.
+_Avoid_: Multi-trunk, release-flow
+
+**Release Branch**:
+A branch forked off `develop` when all planned features are merged, used exclusively for stabilization, documentation, and bug fixes before tagging on `main`.
+_Avoid_: Staging branch, pre-prod branch
+
+**Hotfix Branch**:
+A branch created directly off `main` (or a release tag) to patch an emergency production defect, which must be merged back into both `main` and `develop`.
+_Avoid_: Quickfix, emergency patch
+
+
 
 
