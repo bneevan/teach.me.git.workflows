@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="../assets/styles.css">
   <style>
     .ascii-tree {
-      background: #080c14;
+      background: #0d1117;
       border: 1px solid var(--border-color);
       border-radius: var(--radius-md);
       padding: 1.25rem;
@@ -17,6 +17,12 @@
       color: var(--accent-cyan);
       margin: 1.5rem 0;
       overflow-x: auto;
+    }
+    [data-theme="light"] .ascii-tree {
+      background: #0f172a;
+      color: #38bdf8;
+      border-color: rgba(0, 0, 0, 0.15);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
     }
     .concept-compare {
       display: grid;
@@ -29,6 +35,11 @@
       border: 1px solid var(--border-color);
       border-radius: var(--radius-md);
       padding: 1.25rem;
+    }
+    .compare-card p {
+      font-size: 0.88rem;
+      color: var(--text-secondary);
+      margin-bottom: 0;
     }
     .delta-vcs { border-top: 3px solid var(--accent-rose); }
     .git-vcs { border-top: 3px solid var(--accent-emerald); }
@@ -56,17 +67,17 @@
       <div class="concept-compare">
         <div class="compare-card delta-vcs">
           <h4 style="color: var(--accent-rose); margin-bottom: 0.5rem;">Delta-Based VCS (SVN, CVS)</h4>
-          <p style="font-size: 0.88rem; color: #cbd5e1;">Stores a baseline file and a series of change deltas for each revision. Branching copies whole directory trees on the central server.</p>
+          <p>Stores a baseline file and a series of change deltas for each revision. Branching copies whole directory trees on the central server.</p>
         </div>
         <div class="compare-card git-vcs">
           <h4 style="color: var(--accent-emerald); margin-bottom: 0.5rem;">Snapshot-Based DAG (Git)</h4>
-          <p style="font-size: 0.88rem; color: #cbd5e1;">Every commit points to a full root filesystem snapshot. Unmodified files share exact SHA pointers (zero duplicated disk space).</p>
+          <p>Every commit points to a full root filesystem snapshot. Unmodified files share exact SHA pointers (zero duplicated disk space).</p>
         </div>
       </div>
 
       <h2>2. What is a "DAG" in Git?</h2>
       <p><strong>DAG</strong> stands for <strong>Directed Acyclic Graph</strong>:</p>
-      <ul style="padding-left: 1.5rem; margin-bottom: 1.25rem; color: #cbd5e1; line-height: 1.8;">
+      <ul style="padding-left: 1.5rem; margin-bottom: 1.25rem; line-height: 1.8;">
         <li><strong>Graph:</strong> A network of nodes (Commits) connected by edges.</li>
         <li><strong>Directed:</strong> Edges have a strict one-way direction: <em>children point back to their parent(s)</em>. A commit knows its parent, but a parent never knows what future commits branch off it.</li>
         <li><strong>Acyclic:</strong> It is mathematically impossible to have a loop or cycle. A commit cannot be its own ancestor.</li>
@@ -96,8 +107,8 @@ git branch feature
 
       <h2>5. Check Your Understanding</h2>
       <div class="exercise-box">
-        <h3 style="margin-bottom: 0.75rem; color: var(--accent-cyan);">Diagnostic Challenge</h3>
-        <p style="margin-bottom: 1rem; color: #cbd5e1;">Suppose you make a commit that modifies only 1 line in <code>README.md</code> inside a project containing 10,000 source files. How does Git represent this new commit in its DAG?</p>
+        <h3 style="margin-bottom: 0.75rem; color: var(--accent-indigo);">Diagnostic Challenge</h3>
+        <p style="margin-bottom: 1rem;">Suppose you make a commit that modifies only 1 line in <code>README.md</code> inside a project containing 10,000 source files. How does Git represent this new commit in its DAG?</p>
 
         <button class="quiz-option" onclick="handleQuiz(this, false)">
           A. Git recalculates and stores 10,000 new file blobs to ensure an independent snapshot.
@@ -132,12 +143,24 @@ git branch feature
       const explanation = document.getElementById('quiz-explanation');
       explanation.style.display = 'block';
 
+      const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+
       if (isCorrect) {
         button.classList.add('correct');
-        explanation.style.background = 'rgba(16, 185, 129, 0.15)';
+        explanation.style.background = isLight ? 'rgba(16, 185, 129, 0.1)' : 'rgba(16, 185, 129, 0.18)';
         explanation.style.border = '1px solid var(--accent-emerald)';
-        explanation.style.color = '#a7f3d0';
+        explanation.style.color = isLight ? '#065f46' : '#a7f3d0';
         explanation.innerHTML = '<strong>Correct!</strong> Git creates a full tree snapshot, but because 9,999 files were identical, their SHA hash did not change. Git simply reuses the existing tree/blob pointers. It is both a complete snapshot AND mathematically efficient.';
+      } else {
+        button.classList.add('wrong');
+        buttons[1].classList.add('correct');
+        explanation.style.background = isLight ? 'rgba(244, 63, 94, 0.1)' : 'rgba(244, 63, 94, 0.18)';
+        explanation.style.border = '1px solid var(--accent-rose)';
+        explanation.style.color = isLight ? '#9f1239' : '#fecdd3';
+        explanation.innerHTML = '<strong>Notice:</strong> Git is a snapshot model, but it never blindly duplicates unchanged files. Option B is how Git achieves lightning-fast snapshotting through content addressing (identical content produces the exact same SHA-1 hash).';
+      }
+    }
+  </script>
       } else {
         button.classList.add('wrong');
         buttons[1].classList.add('correct');
