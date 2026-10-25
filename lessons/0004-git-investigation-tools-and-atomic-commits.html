@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 04: Forensic Git Tools & The Atomic Commit Rule</title>
+  <link rel="stylesheet" href="../assets/styles.css?v=2.0">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌿</text></svg>">
+</head>
+<body>
+  <div class="container lesson-container">
+    <div class="lesson-meta-bar">
+      <div>
+        <a href="../dashboard.html" style="font-size: 0.85rem; font-weight: 600;">← Back to Dashboard</a>
+        <h1 style="font-size: 1.85rem; margin-top: 0.4rem;">Lesson 04: Forensic Git Tools & Atomic Commits</h1>
+      </div>
+      <button class="btn btn-sm" onclick="toggleTheme()" id="theme-toggle-btn">☀️ Light</button>
+    </div>
+
+    <div class="lesson-content">
+      <div class="callout">
+        <div class="callout-title">🎯 Single Tangible Win for this Lesson</div>
+        <p>Master how software teams use <code>git bisect</code>, <code>git blame</code>, and <code>git reflog</code> to diagnose regressions in seconds, and understand why <strong>broken intermediate commits destroy your ability to debug</strong>.</p>
+      </div>
+
+      <h2>1. The Problem: "It worked 2 months ago, but it's broken today!"</h2>
+      <p>A customer reports that CSV export in your production app is failing. Two months ago (1,000 commits ago), it worked perfectly. In between, 30 different engineers pushed code. How do you find the exact line and commit that broke it without spending two days reading diffs?</p>
+
+      <h2>2. git bisect: Binary Search Across History</h2>
+      <p><code>git bisect</code> is a built-in binary search algorithm that splits the commit history in half with each iteration:</p>
+      
+      <div class="terminal-block">
+        <div class="terminal-header">
+          <span class="terminal-dot red"></span>
+          <span class="terminal-dot yellow"></span>
+          <span class="terminal-dot green"></span>
+          <span class="terminal-title">git bisect algorithm</span>
+        </div>
+        <div class="terminal-body">Total Commits: 1,024
+Step 1: Git checks out commit #512  -> Test code -> FAIL (mark bad)
+Step 2: Git checks out commit #256  -> Test code -> PASS (mark good)
+Step 3: Git checks out commit #384  -> Test code -> PASS (mark good)
+...
+Step 10: Git finds the EXACT commit that broke it in 10 tests!</div>
+      </div>
+
+      <h2>3. Why "Squash and Merge" Protects Git Bisect</h2>
+      <p>Here is the critical connection between <strong>team workflow</strong> and <strong>tooling</strong>:</p>
+      <p>Suppose a developer opened a PR with 5 commits. Commit #2 had a syntax error that didn't compile, which they fixed later in Commit #4. If that PR was merged using <strong>Merge Commit</strong>, all 5 commits are placed on <code>main</code>.</p>
+      <div class="concept-compare">
+        <div class="compare-card con">
+          <h4 style="color: var(--accent-danger);">The Broken Commit Trap</h4>
+          <p>If <code>git bisect</code> lands on Commit #2, the test suite won't even run because the code doesn't compile! Bisect gets stuck, forcing the engineer to guess with <code>git bisect skip</code>.</p>
+        </div>
+        <div class="compare-card pro">
+          <h4 style="color: var(--accent-success);">The Atomic Squash Rule</h4>
+          <p>By using <strong>Squash and Merge</strong>, every single commit on <code>main</code> is guaranteed to be clean, tested, and buildable. <code>git bisect run</code> runs automatically from start to finish without hitch.</p>
+        </div>
+      </div>
+
+      <h2>4. Other Critical Investigation Tools</h2>
+      <ul>
+        <li><strong><code>git blame -L &lt;start&gt;,&lt;end&gt; &lt;file&gt;</code></strong>: Reveals who wrote each line and when. Use <code>.git-blame-ignore-revs</code> to ignore large codebase-wide formatting or linting refactors.</li>
+        <li><strong><code>git log -S "query"</code> (Pickaxe)</strong>: Scans the actual code changes across the entire history to find the exact commit where a specific function, string, or secret appeared or disappeared.</li>
+        <li><strong><code>git reflog</code></strong>: A private ledger recording every position of your local <code>HEAD</code> pointer. If you run <code>git reset --hard</code> by mistake and lose commits, <code>git reflog</code> lets you resurrect them in seconds.</li>
+      </ul>
+
+      <h2>5. Primary Source Authority</h2>
+      <p>📖 <a href="https://git-scm.com/docs/git-bisect" target="_blank" style="font-weight: 600;">Official Git Documentation on git-bisect</a>.</p>
+      <p>📑 Companion Reference: <a href="../reference/git-investigation-tools.html">Reference Sheet: Forensic Git Investigation Tools</a>.</p>
+
+      <h2>6. Check Your Understanding</h2>
+      <div class="exercise-box">
+        <h3>Investigation Scenario Challenge</h3>
+        <p>You have an automated test file <code>tests/test_csv_export.py</code> that returns exit code 0 when CSV export succeeds, and exit code 1 when it fails. How can you find the regression commit with zero manual testing?</p>
+
+        <button class="quiz-option" data-correct="false" onclick="handleQuizAnswer(this, false, 'quiz-expl-04', '', 'git blame only shows the last author of a file, not which commit caused a regression.')">
+          A. Run git blame --exit-code on the CSV exporter file to reveal the failing line.
+        </button>
+        <button class="quiz-option" data-correct="true" onclick="handleQuizAnswer(this, true, 'quiz-expl-04', 'git bisect run automatically checks out each commit, runs your test script, marks it good/bad based on the exit code, and halts directly on the culprit commit!', '')">
+          B. Run git bisect start, mark good/bad boundaries, and execute git bisect run pytest tests/test_csv_export.py.
+        </button>
+        <button class="quiz-option" data-correct="false" onclick="handleQuizAnswer(this, false, 'quiz-expl-04', '', 'git reflog tracks your local HEAD movements, not regression states across team history.')">
+          C. Use git reflog search --test=tests/test_csv_export.py to rewind through local branches.
+        </button>
+
+        <div id="quiz-expl-04" style="display: none;"></div>
+      </div>
+
+      <div class="callout callout-reflection">
+        <div class="callout-title">💬 Socratic Reflection with Your Assistant</div>
+        <p>Now that you see how <code>git bisect</code> automates bug-hunting, how does this change your view of committing broken work-in-progress code? What should a team's policy be for commits that reach <code>main</code>?</p>
+      </div>
+    </div>
+  </div>
+
+  <script src="../assets/app.js?v=2.0"></script>
+</body>
+</html>

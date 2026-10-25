@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reference: Forensic Git Investigation Tools</title>
+  <link rel="stylesheet" href="../assets/styles.css?v=2.0">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌿</text></svg>">
+</head>
+<body>
+  <div class="container lesson-container">
+    <div class="lesson-meta-bar">
+      <div>
+        <a href="../dashboard.html" style="font-size: 0.85rem; font-weight: 600;">← Back to Dashboard</a>
+        <h1 style="font-size: 1.85rem; margin-top: 0.4rem;">Reference Sheet: Forensic Git Investigation Tools</h1>
+      </div>
+      <button class="btn btn-sm" onclick="toggleTheme()" id="theme-toggle-btn">☀️ Light</button>
+    </div>
+
+    <div class="lesson-content">
+      <div class="callout">
+        <div class="callout-title">💡 The Investigation Core Law</div>
+        <p>A repository’s commit history is not just a backup; it is an <strong>executable audit log</strong>. When commits are atomic and buildable, Git's investigation tools (`bisect`, `blame`, `reflog`, `pickaxe`) can isolate bugs in seconds.</p>
+      </div>
+
+      <h2>1. git bisect: Binary Search Bug Hunting</h2>
+      <p>Instead of manually checking 1,000 commits one by one, <code>git bisect</code> uses binary search to find the offending commit in just <strong>10 steps</strong> ($O(\log_2 1000) \approx 10$).</p>
+
+      <div class="terminal-block">
+        <div class="terminal-header">
+          <span class="terminal-dot red"></span>
+          <span class="terminal-dot yellow"></span>
+          <span class="terminal-dot green"></span>
+          <span class="terminal-title">git bisect manual workflow</span>
+        </div>
+        <div class="terminal-body">$ git bisect start
+$ git bisect bad                 # Current HEAD is broken
+$ git bisect good v1.4.0         # Version 1.4.0 was working
+Bisecting: 500 revisions left to test after this (roughly 9 steps)
+[c3d4...] checkout middle commit
+
+# Test your code... if broken:
+$ git bisect bad
+# ...if working:
+$ git bisect good
+
+# Once found:
+$ git bisect reset</div>
+      </div>
+
+      <div class="callout" style="border-left-color: var(--accent-success);">
+        <div class="callout-title" style="color: var(--accent-success);">⚡ Superpower: Automated Bisecting</div>
+        <p>You can let Git find the bug completely automatically by giving it an automated test script!</p>
+        <code style="display: block; margin-top: 0.5rem;">$ git bisect run npm test<br># or: git bisect run pytest tests/test_payment.py</code>
+      </div>
+
+      <h2>2. git blame & .git-blame-ignore-revs</h2>
+      <p>Annotates every line in a file with the commit hash, author, and timestamp of when it was last modified.</p>
+      
+      <div class="terminal-block">
+        <div class="terminal-header">
+          <span class="terminal-dot red"></span>
+          <span class="terminal-dot yellow"></span>
+          <span class="terminal-dot green"></span>
+          <span class="terminal-title">git blame usage</span>
+        </div>
+        <div class="terminal-body">$ git blame -L 120,135 src/auth.py
+# Shows lines 120 through 135 with author and commit SHA</div>
+      </div>
+
+      <p><strong>The Formatting Trap:</strong> Running a global code formatter (Prettier / Black) touches every line in the repo, replacing all authors with "Formatter Bot".</p>
+      <p><strong>The Solution:</strong> Create a <code>.git-blame-ignore-revs</code> file containing the formatting commit SHA, and configure Git:</p>
+      <code>$ git config blame.ignoreRevsFile .git-blame-ignore-revs</code>
+
+      <h2>3. git log -S (The Pickaxe)</h2>
+      <p>Searches the history for commits that added or removed a specific string or variable name (unlike <code>git grep</code>, which only searches current code).</p>
+      <div class="terminal-block">
+        <div class="terminal-header">
+          <span class="terminal-dot red"></span>
+          <span class="terminal-dot yellow"></span>
+          <span class="terminal-dot green"></span>
+          <span class="terminal-title">git log pickaxe</span>
+        </div>
+        <div class="terminal-body">$ git log -S "STRIPE_SECRET_KEY" --oneline
+# Lists only the commits where this string was introduced or deleted</div>
+      </div>
+
+      <h2>4. git reflog: The Time Machine</h2>
+      <p>Git never throws away your commits immediately. The <strong>Reference Log (reflog)</strong> records every single movement of your local <code>HEAD</code> pointer over the past 30–90 days.</p>
+      <div class="terminal-block">
+        <div class="terminal-header">
+          <span class="terminal-dot red"></span>
+          <span class="terminal-dot yellow"></span>
+          <span class="terminal-dot green"></span>
+          <span class="terminal-title">git reflog restore</span>
+        </div>
+        <div class="terminal-body">$ git reflog
+9a2f64c HEAD@{0}: reset: moving to HEAD~1
+3b0911c HEAD@{1}: commit: add payment feature
+d3d1c9a HEAD@{2}: checkout: moving from feat to main
+
+# Recover a lost commit after an accidental hard reset:
+$ git reset --hard HEAD@{1}</div>
+      </div>
+    </div>
+  </div>
+  <script src="../assets/app.js?v=2.0"></script>
+</body>
+</html>
