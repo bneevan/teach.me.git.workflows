@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Engineering Git Workflows — Interactive Course Dashboard</title>
+  <link rel="stylesheet" href="assets/styles.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌿</text></svg>">
+</head>
+<body>
+  <div class="container">
+    <header class="hero">
+      <div>
+        <div class="hero-badge">⚡ Socratic Engineering Masterclass</div>
+        <h1>Git Workflows & Team Collaboration</h1>
+        <p>Master how high-performing software organizations orchestrate branching, integration, continuous delivery, and release governance at scale.</p>
+      </div>
+      <div class="hero-actions">
+        <button id="theme-toggle-btn" class="btn" onclick="toggleTheme()">☀️ Light</button>
+        <a href="#curriculum" class="btn btn-primary" onclick="switchTab('tab-curriculum')">Browse Curriculum</a>
+      </div>
+    </header>
+
+    <!-- Key Metrics Grid -->
+    <div class="metrics-grid">
+      <div class="metric-card">
+        <div class="metric-label">Course Modules</div>
+        <div class="metric-value">9 Modules</div>
+        <div class="metric-sub">Foundations to GitOps</div>
+      </div>
+      <div class="metric-card emerald">
+        <div class="metric-label">Active Phase</div>
+        <div class="metric-value" style="font-size: 1.35rem; color: var(--accent-emerald);">Diagnostic Baseline</div>
+        <div class="metric-sub">Calibrating your baseline</div>
+      </div>
+      <div class="metric-card amber">
+        <div class="metric-label">Interactive Flashcards</div>
+        <div class="metric-value" id="stat-known-cards">0 / 16</div>
+        <div class="metric-sub">Mastered for quick retrieval</div>
+      </div>
+      <div class="metric-card purple">
+        <div class="metric-label">Teaching Model</div>
+        <div class="metric-value" style="font-size: 1.35rem; color: var(--accent-purple);">Socratic + ZPD</div>
+        <div class="metric-sub">One concept at a time</div>
+      </div>
+    </div>
+
+    <!-- Navigation Tabs -->
+    <div class="tabs-nav">
+      <button class="tab-btn active" data-tab="tab-curriculum" onclick="switchTab('tab-curriculum')">
+        📚 Curriculum Roadmap <span class="tab-badge">9</span>
+      </button>
+      <button class="tab-btn" data-tab="tab-flashcards" onclick="switchTab('tab-flashcards')">
+        🗂️ Flashcard Revision Hub <span class="tab-badge">16</span>
+      </button>
+      <button class="tab-btn" data-tab="tab-matrix" onclick="switchTab('tab-matrix')">
+        ⚖️ Workflow Comparison Matrix
+      </button>
+      <button class="tab-btn" data-tab="tab-mission" onclick="switchTab('tab-mission')">
+        🎯 Mission & Learning Records
+      </button>
+    </div>
+
+    <!-- Tab 1: Curriculum Roadmap -->
+    <div id="tab-curriculum" class="tab-content">
+      <div class="section-header">
+        <div class="section-title">Course Modules & Progression</div>
+        <div style="font-size: 0.85rem; color: var(--text-muted);">Self-contained HTML lessons generate dynamically as you progress.</div>
+      </div>
+
+      <div class="module-grid">
+        <!-- Module 0 -->
+        <div class="module-card" style="border-color: rgba(56, 189, 248, 0.4);">
+          <div class="module-top">
+            <span class="module-num">MOD 00</span>
+            <span class="module-status status-active">● Active Diagnostics</span>
+          </div>
+          <h3 class="module-title">Foundations & Knowledge Assessment</h3>
+          <p class="module-desc">Calibrating your baseline mental model: Directed Acyclic Graphs (DAG), commit pointer mechanics, merge topologies, fast-forwarding, and rebasing mechanics.</p>
+          <div class="module-tags">
+            <span class="tag">DAG Topology</span>
+            <span class="tag">Refs & HEAD</span>
+            <span class="tag">Fast-Forward</span>
+            <span class="tag">Interactive Diagnostics</span>
+          </div>
+          <div class="module-footer">
+            <span class="module-meta">Estimated: 15 min</span>
+            <span style="font-size: 0.8rem; font-weight: 600; color: var(--accent-cyan);">In Progress in Chat</span>
+          </div>
+        </div>
+
+        <!-- Module 1 -->
+        <div class="module-card">
+          <div class="module-top">
+            <span class="module-num">MOD 01</span>
+            <span class="module-status status-next">Upcoming</span>
+          </div>
+          <h3 class="module-title">Centralized Workflow</h3>
+          <p class="module-desc">The SVN transition model. Single main branch, lockstep collaboration, local rebasing, push rejection loops, and why teams outgrow it as headcount scales.</p>
+          <div class="module-tags">
+            <span class="tag">Central Remote</span>
+            <span class="tag">Non-Fast-Forward</span>
+            <span class="tag">Pull --rebase</span>
+            <span class="tag">Lockstep Overhead</span>
+          </div>
+          <div class="module-footer">
+            <span class="module-meta">Estimated: 20 min</span>
+            <span style="font-size: 0.8rem; color: var(--text-muted);">Unlocks after Mod 00</span>
+          </div>
+        </div>
+
+        <!-- Module 2 -->
+        <div class="module-card">
+          <div class="module-top">
+            <span class="module-num">MOD 02</span>
+            <span class="module-status status-upcoming">Upcoming</span>
+          </div>
+          <h3 class="module-title">Feature Branching & GitHub Flow</h3>
+          <p class="module-desc">Lightweight topic branches, Pull Request lifecycle, branch protection rules, atomic continuous delivery, and avoiding branch aging debt.</p>
+          <div class="module-tags">
+            <span class="tag">Topic Branches</span>
+            <span class="tag">PR Review Gates</span>
+            <span class="tag">Squash vs Merge</span>
+            <span class="tag">Continuous Deployment</span>
+          </div>
+          <div class="module-footer">
+            <span class="module-meta">Estimated: 30 min</span>
+            <span style="font-size: 0.8rem; color: var(--text-muted);">Queued</span>
+          </div>
+        </div>
+
+        <!-- Module 3 -->
+        <div class="module-card">
+          <div class="module-top">
+            <span class="module-num">MOD 03</span>
+            <span class="module-status status-upcoming">Upcoming</span>
+          </div>
+          <h3 class="module-title">Trunk-Based Development (TBD)</h3>
+          <p class="module-desc">High-velocity engineering at Google and Meta scale. Sub-24h branches, continuous integration discipline, Feature Toggles, and Branch by Abstraction.</p>
+          <div class="module-tags">
+            <span class="tag">Single Trunk</span>
+            <span class="tag">Feature Flags</span>
+            <span class="tag">Branch by Abstraction</span>
+            <span class="tag">Fast CI Gates</span>
+          </div>
+          <div class="module-footer">
+            <span class="module-meta">Estimated: 35 min</span>
+            <span style="font-size: 0.8rem; color: var(--text-muted);">Queued</span>
+          </div>
+        </div>
+
+        <!-- Module 4 -->
+        <div class="module-card">
+          <div class="module-top">
+            <span class="module-num">MOD 04</span>
+            <span class="module-status status-upcoming">Upcoming</span>
+          </div>
+          <h3 class="module-title">Gitflow & Scheduled Releases</h3>
+          <p class="module-desc">The dual-branch spine (main + develop), release hardening tracks, hotfix branches off production, SemVer synchronization, and when NOT to use it.</p>
+          <div class="module-tags">
+            <span class="tag">Develop vs Main</span>
+            <span class="tag">Release Branches</span>
+            <span class="tag">Hotfix Backports</span>
+            <span class="tag">Batch Cadence</span>
+          </div>
+          <div class="module-footer">
+            <span class="module-meta">Estimated: 35 min</span>
+            <span style="font-size: 0.8rem; color: var(--text-muted);">Queued</span>
+          </div>
+        </div>
+
+        <!-- Module 5 -->
+        <div class="module-card">
+          <div class="module-top">
+            <span class="module-num">MOD 05</span>
+            <span class="module-status status-upcoming">Upcoming</span>
+          </div>
+          <h3 class="module-title">Fork-and-Pull-Request (Open Source)</h3>
+          <p class="module-desc">Distributed trust boundaries. Upstream vs Origin remotes, rebase syncing, maintainer triage, CI security risks with untrusted pull requests, and CLA checks.</p>
+          <div class="module-tags">
+            <span class="tag">Upstream Remotes</span>
+            <span class="tag">Untrusted Code Gates</span>
+            <span class="tag">Maintainer Governance</span>
+          </div>
+          <div class="module-footer">
+            <span class="module-meta">Estimated: 25 min</span>
+            <span style="font-size: 0.8rem; color: var(--text-muted);">Queued</span>
+          </div>
+        </div>
+
+        <!-- Module 6 -->
+        <div class="module-card">
+          <div class="module-top">
+            <span class="module-num">MOD 06</span>
+            <span class="module-status status-upcoming">Upcoming</span>
+          </div>
+          <h3 class="module-title">Release Management & Semantic Versioning</h3>
+          <p class="module-desc">SemVer 2.0.0 contracts, Conventional Commits automation, annotated Git tags, release candidates, changelog generation, and surgical cherry-picks.</p>
+          <div class="module-tags">
+            <span class="tag">SemVer 2.0</span>
+            <span class="tag">Conventional Commits</span>
+            <span class="tag">Annotated Tags</span>
+            <span class="tag">Release-Please</span>
+          </div>
+          <div class="module-footer">
+            <span class="module-meta">Estimated: 25 min</span>
+            <span style="font-size: 0.8rem; color: var(--text-muted);">Queued</span>
+          </div>
+        </div>
+
+        <!-- Module 7 -->
+        <div class="module-card">
+          <div class="module-top">
+            <span class="module-num">MOD 07</span>
+            <span class="module-status status-upcoming">Upcoming</span>
+          </div>
+          <h3 class="module-title">Monorepos vs Polyrepos</h3>
+          <p class="module-desc">Single source of truth for cross-project code. Atomic refactoring, sparse checkout, affected build graph analysis (Nx/Bazel/Turborepo), and CODEOWNERS boundaries.</p>
+          <div class="module-tags">
+            <span class="tag">Atomic Refactoring</span>
+            <span class="tag">CODEOWNERS</span>
+            <span class="tag">Sparse Checkout</span>
+            <span class="tag">Affected Graph</span>
+          </div>
+          <div class="module-footer">
+            <span class="module-meta">Estimated: 35 min</span>
+            <span style="font-size: 0.8rem; color: var(--text-muted);">Queued</span>
+          </div>
+        </div>
+
+        <!-- Module 8 -->
+        <div class="module-card">
+          <div class="module-top">
+            <span class="module-num">MOD 08</span>
+            <span class="module-status status-upcoming">Upcoming</span>
+          </div>
+          <h3 class="module-title">GitOps & Declarative Operations</h3>
+          <p class="module-desc">Git as the authoritative state for cloud-native systems. In-cluster reconciliation agents (ArgoCD/Flux), immutable commit digests, and promotion patterns without branch drift.</p>
+          <div class="module-tags">
+            <span class="tag">OpenGitOps</span>
+            <span class="tag">ArgoCD / Flux</span>
+            <span class="tag">Drift Reconciliation</span>
+            <span class="tag">Environment Folders</span>
+          </div>
+          <div class="module-footer">
+            <span class="module-meta">Estimated: 30 min</span>
+            <span style="font-size: 0.8rem; color: var(--text-muted);">Queued</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tab 2: Flashcards Revision Hub -->
+    <div id="tab-flashcards" class="tab-content" style="display: none;">
+      <div class="section-header">
+        <div class="section-title">🗂️ Interactive Flashcard Revision Deck</div>
+        <div style="font-size: 0.85rem; color: var(--text-muted);">Press <kbd style="background: rgba(255,255,255,0.1); padding: 2px 6px; border-radius: 4px;">Space</kbd> to flip, <kbd style="background: rgba(255,255,255,0.1); padding: 2px 6px; border-radius: 4px;">→</kbd> next, <kbd style="background: rgba(255,255,255,0.1); padding: 2px 6px; border-radius: 4px;">←</kbd> previous</div>
+      </div>
+
+      <div class="flashcards-container">
+        <!-- Filter Bar -->
+        <div class="flashcard-filter-bar">
+          <button class="filter-btn active" data-filter="all" onclick="filterFlashcards('all', this)">All Concepts</button>
+          <button class="filter-btn" data-filter="branching-models" onclick="filterFlashcards('branching-models', this)">Branching Models</button>
+          <button class="filter-btn" data-filter="ci-cd-releases" onclick="filterFlashcards('ci-cd-releases', this)">Release & CI/CD</button>
+          <button class="filter-btn" data-filter="gitops-monorepo" onclick="filterFlashcards('gitops-monorepo', this)">Monorepo & GitOps</button>
+          <button class="filter-btn" data-filter="governance-hygiene" onclick="filterFlashcards('governance-hygiene', this)">Governance & Hygiene</button>
+          <button class="filter-btn" data-filter="known" onclick="filterFlashcards('known', this)">Mastered Cards</button>
+        </div>
+
+        <!-- 3D Card -->
+        <div class="flashcard-wrapper">
+          <div id="flashcard-card" class="flashcard-card" onclick="flipFlashcard()">
+            <!-- Front Face -->
+            <div class="flashcard-face card-front">
+              <div class="card-header-line">
+                <span id="card-cat-front" class="card-category">Branching Models • Trunk-Based Dev</span>
+                <span class="card-hint">Click card or press Space to reveal answer</span>
+              </div>
+              <div class="card-body-content">
+                <div id="card-question-text" class="card-question">
+                  What is the core operational principle of Trunk-Based Development (TBD)?
+                </div>
+              </div>
+              <div class="card-footer-line">
+                <span>🔄 Click to flip</span>
+                <span id="card-counter-display" class="card-counter">1 of 16</span>
+              </div>
+            </div>
+
+            <!-- Back Face -->
+            <div class="flashcard-face card-back">
+              <div class="card-header-line">
+                <span id="card-cat-back" class="card-category">Branching Models • Trunk-Based Dev</span>
+                <span class="card-hint" style="color: var(--accent-emerald);">Answer Breakdown</span>
+              </div>
+              <div class="card-body-content">
+                <div class="card-answer-heading">✓ Core Definition</div>
+                <div id="card-answer-text" class="card-answer">
+                  All engineers merge small, frequent commits directly into a single shared branch ('trunk' or 'main') at least once a day, avoiding long-lived feature branches.
+                </div>
+                <div class="card-key-insight">
+                  <strong>Architectural Key Insight:</strong>
+                  <span id="card-insight-text">Merge conflicts grow super-linearly with branch lifespan. TBD eliminates merge debt by forcing continuous daily integration.</span>
+                </div>
+              </div>
+              <div class="card-footer-line">
+                <span>🔄 Click to flip back</span>
+                <span>Spaced Repetition Active</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Nav Controls -->
+        <div class="flashcard-nav-controls">
+          <div style="display: flex; gap: 0.5rem;">
+            <button class="btn" onclick="prevFlashcard()">← Previous</button>
+            <button class="btn" onclick="nextFlashcard()">Next →</button>
+          </div>
+          <button id="card-mark-known-btn" class="btn" onclick="toggleCardKnown()">Mark Known</button>
+          <button class="btn" onclick="shuffleFlashcards()">🔀 Shuffle</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tab 3: Workflow Comparison Matrix -->
+    <div id="tab-matrix" class="tab-content" style="display: none;">
+      <div class="section-header">
+        <div class="section-title">Architectural Trade-Off & Comparison Matrix</div>
+      </div>
+
+      <div class="table-responsive">
+        <table class="matrix-table">
+          <thead>
+            <tr>
+              <th>Workflow Strategy</th>
+              <th>Release Cadence</th>
+              <th>Merge Lifespan</th>
+              <th>CI/CD Requirement</th>
+              <th>Rollback / Recovery</th>
+              <th>Ideal Team & Context</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="workflow-name"><span style="color: #94a3b8;">●</span> Centralized</td>
+              <td>Ad-hoc / Manual</td>
+              <td>0 (Commit directly or local rebase)</td>
+              <td>Minimal (often optional)</td>
+              <td>High friction (reverts on main)</td>
+              <td>1-3 developers, SVN migrants, solo projects</td>
+            </tr>
+            <tr>
+              <td class="workflow-name"><span style="color: var(--accent-cyan);">●</span> GitHub Flow</td>
+              <td>Continuous (Daily / Multiple per day)</td>
+              <td>Hours to a few days</td>
+              <td>Strict automated tests & deployment gates</td>
+              <td>Fast (revert PR or redeploy prior commit)</td>
+              <td>Web applications, SaaS, microservices, startups</td>
+            </tr>
+            <tr>
+              <td class="workflow-name"><span style="color: var(--accent-emerald);">●</span> Trunk-Based Dev</td>
+              <td>Continuous / On-demand</td>
+              <td>Sub-24 hours (< 1 day)</td>
+              <td>Essential (ultra-fast CI, Feature Flags)</td>
+              <td>Instant via Feature Flag toggle (zero redeploy)</td>
+              <td>High-velocity engineering (Google, Netflix, Meta), mature CI</td>
+            </tr>
+            <tr>
+              <td class="workflow-name"><span style="color: var(--accent-amber);">●</span> Gitflow</td>
+              <td>Scheduled / Batched (bi-weekly, monthly)</td>
+              <td>Days to weeks (feature & release branches)</td>
+              <td>Standard automated builds</td>
+              <td>Medium (dedicated hotfix branches to main & develop)</td>
+              <td>Boxed enterprise software, multi-version maintenance, mobile apps</td>
+            </tr>
+            <tr>
+              <td class="workflow-name"><span style="color: var(--accent-purple);">●</span> Fork & Pull-Request</td>
+              <td>Release-driven or continuous</td>
+              <td>Varies by contributor</td>
+              <td>Strict automated sandboxed CI for PRs</td>
+              <td>Maintainer-driven revert</td>
+              <td>Open Source, untrusted multi-party contributors, contractors</td>
+            </tr>
+            <tr>
+              <td class="workflow-name"><span style="color: var(--accent-rose);">●</span> GitOps</td>
+              <td>Continuous automated sync</td>
+              <td>Driven by trunk merges or image tags</td>
+              <td>Kubernetes / declarative engine + ArgoCD/Flux</td>
+              <td>Instant git revert triggers automated downward reconciliation</td>
+              <td>Cloud-native infrastructure, Kubernetes clusters, zero-drift platforms</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Tab 4: Mission & Learning Records -->
+    <div id="tab-mission" class="tab-content" style="display: none;">
+      <div class="section-header">
+        <div class="section-title">Course Mission & Educational Principles</div>
+      </div>
+      <div class="exercise-box">
+        <h3 style="margin-bottom: 0.75rem; color: var(--accent-cyan);">Why We Are Here</h3>
+        <p style="margin-bottom: 1rem; color: #cbd5e1;">To elevate your Git fluency from basic command memory (add, commit, push) to high-level architectural decision-making. You will learn to evaluate how team topology, deployment constraints, release frequency, and code ownership determine the right workflow.</p>
+        
+        <h4 style="margin: 1.25rem 0 0.5rem; color: #fff;">Teaching Contract:</h4>
+        <ul style="padding-left: 1.5rem; color: #cbd5e1; line-height: 1.8;">
+          <li><strong>One concept at a time:</strong> No knowledge dumps. Each step builds on verified understanding.</li>
+          <li><strong>Active Socratic engagement:</strong> You will be asked to analyze scenarios, predict merge behaviors, and resolve dilemmas.</li>
+          <li><strong>Progressive artifact generation:</strong> Lessons, reference cheat sheets, and learning records will be persisted in this workspace.</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="assets/app.js"></script>
+</body>
+</html>
